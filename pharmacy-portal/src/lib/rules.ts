@@ -13,9 +13,6 @@ export function getDispenseBlock(rx: Prescription): string | null {
   if (refillState(rx.refill_due_date) === 'EXPIRED') {
     return `Expired on ${formatDate(rx.refill_due_date)}. Expired prescriptions cannot be dispensed.`
   }
-  if (rx.items.some((i) => i.is_controlled)) {
-    return 'Contains a controlled medicine. Use the controlled-drug register process; it cannot be dispensed here.'
-  }
   if (rx.items.length === 0) {
     return 'This prescription has no medicines listed.'
   }

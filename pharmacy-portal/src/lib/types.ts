@@ -41,6 +41,7 @@ export interface Prescription {
   id: string
   patient_id: string
   prescriber_name: string
+  hospital_name?: string | null
   issued_on: string
   refill_due_date: string
   status: PrescriptionStatus

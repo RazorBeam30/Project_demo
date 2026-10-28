@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { Ban, Info, Pill } from 'lucide-react'
+import { Ban, Info, Pill, ShieldAlert } from 'lucide-react'
 import { getDispenseBlock } from '../lib/rules'
 import type { CounterDetails, Prescription } from '../lib/types'
 
@@ -13,6 +13,7 @@ interface Props {
 export default function DispensePanel({ prescription, counter, onCounterChange, onStart }: Props) {
   const id = useId()
   const block = getDispenseBlock(prescription)
+  const hasControlled = prescription.items.some((i) => i.is_controlled)
   const namesMissing = !counter.pharmacyName.trim() || !counter.chemistName.trim()
   const disabled = Boolean(block) || namesMissing
   const helpId = `${id}-help`
@@ -71,6 +72,12 @@ export default function DispensePanel({ prescription, counter, onCounterChange, 
         >
           <Ban className="mt-0.5 h-6 w-6 shrink-0" aria-hidden="true" />
           {block}
+        </p>
+      )}
+      {hasControlled && !block && (
+        <p className="mt-4 flex items-center gap-2 rounded-lg border-2 border-amber-600 bg-amber-50 p-3 text-lg font-bold text-amber-950">
+          <ShieldAlert className="h-6 w-6 shrink-0 text-amber-700" aria-hidden="true" />
+          <span>Notice: This prescription contains controlled medicine. Verify patient identity and register entry before dispensing.</span>
         </p>
       )}
       {!block && namesMissing && (

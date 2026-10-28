@@ -67,6 +67,7 @@ export function buildDemo(): DemoStore {
       id: 'rx-1000',
       patient_id: 'pt-1',
       prescriber_name: 'Dr. Demo Kulkarni',
+      hospital_name: 'Apollo Hospital, Bangalore',
       issued_on: addDays(today, -60),
       refill_due_date: addDays(today, -50),
       status: 'DISPENSED',
@@ -88,6 +89,7 @@ export function buildDemo(): DemoStore {
       id: 'rx-1001',
       patient_id: 'pt-1',
       prescriber_name: 'Dr. Demo Kulkarni',
+      hospital_name: 'Apollo Hospital, Bangalore',
       issued_on: addDays(today, -20),
       refill_due_date: today,
       status: 'ACTIVE',
@@ -134,7 +136,8 @@ export function buildDemo(): DemoStore {
     {
       id: 'rx-1002',
       patient_id: 'pt-1',
-      prescriber_name: 'Dr. Demo Kulkarni',
+      prescriber_name: 'Dr. Neha Sharma',
+      hospital_name: 'Manipal Hospital, Bangalore',
       issued_on: addDays(today, -2),
       refill_due_date: addDays(today, 5),
       status: 'ACTIVE',
@@ -155,11 +158,35 @@ export function buildDemo(): DemoStore {
         }),
       ],
     },
+    // Earlier visit with Dr. Neha Sharma
+    {
+      id: 'rx-1003',
+      patient_id: 'pt-1',
+      prescriber_name: 'Dr. Neha Sharma',
+      hospital_name: 'Manipal Hospital, Bangalore',
+      issued_on: addDays(today, -45),
+      refill_due_date: addDays(today, -35),
+      status: 'DISPENSED',
+      dispensed_at: new Date(Date.now() - 40 * 24 * 3600 * 1000).toISOString(),
+      items: [
+        item('rx-1003', {
+          medicine_name: 'Fictocream',
+          strength: '0.5%',
+          form: 'Cream',
+          dose: 'Apply once at night',
+          frequency_label: 'Once daily',
+          schedule_slots: ['BEDTIME'],
+          duration_days: 10,
+          quantity: 1,
+        }),
+      ],
+    },
     // Expired (red): cannot be dispensed
     {
       id: 'rx-2001',
       patient_id: 'pt-2',
       prescriber_name: 'Dr. Demo Rao',
+      hospital_name: 'Fortis Clinic, Mumbai',
       issued_on: addDays(today, -14),
       refill_due_date: addDays(today, -3),
       status: 'ACTIVE',
@@ -179,11 +206,12 @@ export function buildDemo(): DemoStore {
         }),
       ],
     },
-    // Contains a controlled medicine: blocked on this screen
+    // Contains a controlled medicine: pharmacist can view and dispense
     {
       id: 'rx-3001',
       patient_id: 'pt-3',
       prescriber_name: 'Dr. Demo Nair',
+      hospital_name: 'Max Healthcare, Delhi',
       issued_on: addDays(today, -1),
       refill_due_date: addDays(today, 5),
       status: 'ACTIVE',

@@ -83,7 +83,7 @@ export async function getPrescriptions(patientId: string): Promise<Prescription[
   const { data, error } = await requireClient()
     .from('prescriptions')
     .select(
-      'id, patient_id, prescriber_name, issued_on, refill_due_date, status, dispensed_at, prescription_items(*)',
+      'id, patient_id, prescriber_name, hospital_name, issued_on, refill_due_date, status, dispensed_at, prescription_items(*)',
     )
     .eq('patient_id', patientId)
     .order('issued_on', { ascending: false })

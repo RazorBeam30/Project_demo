@@ -31,6 +31,12 @@ export default function PrescriptionSection({
             <Stethoscope className="h-6 w-6 text-brand-900" aria-hidden="true" />
             {prescription.prescriber_name}
           </span>
+          {prescription.hospital_name && (
+            <span className="inline-flex items-center gap-2 font-medium text-slate-700">
+              <span className="text-brand-900 font-bold">🏥</span>
+              {prescription.hospital_name}
+            </span>
+          )}
           <span className="inline-flex items-center gap-2">
             <CalendarDays className="h-6 w-6 text-brand-900" aria-hidden="true" />
             Issued {formatDate(prescription.issued_on)}
@@ -44,7 +50,7 @@ export default function PrescriptionSection({
             className="inline-flex items-center gap-2 rounded-lg border-2 border-brand-900 bg-white px-4 py-2 text-lg font-bold text-brand-900 hover:bg-brand-100"
           >
             <FileText className="h-5 w-5" aria-hidden="true" />
-            Routine guide
+            Preview routine guide
           </button>
         </div>
       </header>

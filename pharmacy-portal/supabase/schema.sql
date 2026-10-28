@@ -247,12 +247,7 @@ begin
     raise exception 'This prescription expired on %.', to_char(v_rx.refill_due_date, 'DD Mon YYYY');
   end if;
 
-  if exists (
-    select 1 from public.prescription_items i
-    where i.prescription_id = v_rx.id and i.is_controlled
-  ) then
-    raise exception 'Contains a controlled medicine. Dispense it through the controlled-drug register process, not this screen.';
-  end if;
+  -- Note: Controlled medicines are flagged for review and register logging, but dispensing is allowed.
 
   select jsonb_agg(jsonb_build_object(
            'item_id', i.id,

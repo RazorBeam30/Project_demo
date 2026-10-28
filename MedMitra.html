@@ -1,68 +1,1033 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>MedMitra</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>MedMitra - Medication Routine Guide</title>
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.1/dist/umd/lucide.min.js"></script>
 <style>
-:root{color-scheme:light;--bg:#F1F5F9;--card:#fff;--ink:#0F172A;--mut:#475569;--pri:#0284C7;--onpri:#fff;--line:#CBD5E1;--warn:#FEF3C7;--wi:#78350F;--bad:#FEE2E2;--bi:#7F1D1D;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0B1220;--card:#0F172A;--ink:#F1F5F9;--mut:#A8B5C7;--pri:#38BDF8;--onpri:#0B1220;--line:#334155;--warn:#422006;--wi:#FDE68A;--bad:#450A0A;--bi:#FECACA}}
-:root[data-theme="dark"]{color-scheme:dark;--bg:#0B1220;--card:#0F172A;--ink:#F1F5F9;--mut:#A8B5C7;--pri:#38BDF8;--onpri:#0B1220;--line:#334155;--warn:#422006;--wi:#FDE68A;--bad:#450A0A;--bi:#FECACA}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}body.big{font-size:22px}body.hc{--line:var(--ink);--mut:var(--ink)}
-header{background:#0F172A;color:#fff;padding:10px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}header b{font-size:1.2em;margin-right:auto}
-main{max-width:980px;margin:0 auto;padding:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
-.btn{min-height:44px;padding:6px 14px;border-radius:8px;border:2px solid var(--pri);background:var(--card);color:var(--pri);font:inherit;font-weight:600;cursor:pointer;display:inline-flex;gap:6px;align-items:center}.btn.p,.btn.on{background:var(--pri);color:var(--onpri)}header .btn{background:transparent;color:#fff;border-color:#7DD3FC}
-input,select,textarea{font:inherit;min-height:44px;padding:6px 10px;border:2px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:100%;box-sizing:border-box}
-label{font-size:.85em;font-weight:600;color:var(--mut);display:block}.g{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.warn{background:var(--warn);color:var(--wi);padding:10px 14px;border-radius:8px;margin:8px 0}.bad{background:var(--bad);color:var(--bi);padding:10px 14px;border-radius:8px;margin:8px 0;font-weight:600}.mut{color:var(--mut)}
-.tag{border:2px solid var(--pri);border-radius:99px;padding:1px 10px;font-weight:700;font-size:.85em}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(360px,100%);background:var(--card);border-left:2px solid var(--line);padding:16px;overflow:auto;z-index:5}
-.modal{position:fixed;inset:0;background:rgba(15,23,42,.65);overflow:auto;padding:16px;z-index:9}.sheet{background:#fff;color:#0F172A;max-width:760px;margin:0 auto;padding:28px;border-radius:8px}.sheet table{width:100%;border-collapse:collapse}.sheet td,.sheet th{border:1px solid #94A3B8;padding:6px;text-align:left}
-.med h3{font-size:2.1rem;margin:0;line-height:1.15}.med .st{font-size:1.5rem;font-weight:700;color:var(--pri)}.blk h2{display:flex;gap:10px;align-items:center;font-size:1.7rem;border-bottom:4px solid var(--pri);padding-bottom:4px}.blk svg{width:36px;height:36px}.pk{width:170px;float:right;margin-left:12px}.tk{display:flex;gap:10px;align-items:center;font-size:1.1em;color:var(--ink)}.tk input{width:30px;min-height:30px}
-@media print{.noprint,header,.drawer{display:none!important}body.mo main{display:none}.modal{position:static;background:none;padding:0}body{background:#fff}}
+:root{
+  color-scheme:light;
+  --bg:#F1F5F9;--card:#fff;--ink:#0F172A;--mut:#475569;
+  --pri:#0284C7;--onpri:#fff;--line:#CBD5E1;
+  --warn:#FEF3C7;--wi:#78350F;--bad:#FEE2E2;--bi:#7F1D1D;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;--bg:#0B1220;--card:#0F172A;--ink:#F1F5F9;--mut:#A8B5C7;--pri:#38BDF8;--onpri:#0B1220;--line:#334155;--warn:#422006;--wi:#FDE68A;--bad:#450A0A;--bi:#FECACA;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;--bg:#0B1220;--card:#0F172A;--ink:#F1F5F9;--mut:#A8B5C7;--pri:#38BDF8;--onpri:#0B1220;--line:#334155;--warn:#422006;--wi:#FDE68A;--bad:#450A0A;--bi:#FECACA;
+}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body.big{font-size:20px}
+body.hc{--line:var(--ink);--mut:var(--ink)}
+
+header{background:#0F172A;color:#fff;padding:12px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header b{font-size:1.3em;margin-right:auto;display:flex;align-items:center;gap:8px}
+main{max-width:1120px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:12px 0}
+.btn{min-height:42px;padding:6px 14px;border-radius:8px;border:2px solid var(--pri);background:var(--card);color:var(--pri);font:inherit;font-weight:600;cursor:pointer;display:inline-flex;gap:6px;align-items:center;transition:all .15s ease}
+.btn:hover{background:#F0F9FF}
+.btn.p,.btn.on{background:var(--pri);color:var(--onpri)}
+.btn.p:hover,.btn.on:hover{opacity:.92}
+header .btn{background:transparent;color:#fff;border-color:#7DD3FC}
+header .btn:hover{background:rgba(255,255,255,0.1)}
+
+input,select,textarea{font:inherit;min-height:42px;padding:6px 10px;border:2px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:100%;box-sizing:border-box}
+label{font-size:.85em;font-weight:600;color:var(--mut);display:block;margin-bottom:3px}
+.g{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.warn{background:var(--warn);color:var(--wi);padding:10px 14px;border-radius:8px;margin:8px 0}
+.bad{background:var(--bad);color:var(--bi);padding:10px 14px;border-radius:8px;margin:8px 0;font-weight:600}
+.mut{color:var(--mut)}
+.tag{border:2px solid var(--pri);border-radius:99px;padding:2px 10px;font-weight:700;font-size:.85em}
+
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(380px,100%);background:var(--card);border-left:2px solid var(--line);padding:18px;overflow:auto;z-index:50;box-shadow:-4px 0 20px rgba(0,0,0,0.15)}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.65);overflow:auto;padding:16px;z-index:90}
+.sheet{background:#fff;color:#0F172A;max-width:760px;margin:0 auto;padding:28px;border-radius:8px}
+.sheet table{width:100%;border-collapse:collapse}
+.sheet td,.sheet th{border:1px solid #94A3B8;padding:6px;text-align:left}
+
+/* Routine Guide Document Styles (Matches the Patient Guide Layout) */
+.routine-doc{
+  background:#fff;
+  color:#0F172A;
+  border:1px solid #CBD5E1;
+  border-radius:12px;
+  padding:24px 28px;
+  margin:12px auto;
+  box-shadow:0 4px 18px rgba(0,0,0,0.06);
+}
+.guide-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding-bottom:16px;
+  border-bottom:2px solid #E2E8F0;
+  flex-wrap:wrap;
+}
+.brand-title-wrap{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.brand-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.brand-logo-icon{
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  background:linear-gradient(135deg, #0284C7, #0D9488);
+  color:#fff;
+  display:grid;
+  place-items:center;
+}
+.brand-logo-icon svg{width:26px;height:26px}
+.brand-text b{font-size:1.6rem;color:#0F172A;line-height:1.1;display:block}
+.brand-text span{font-size:0.75rem;color:#0284C7;font-weight:600;letter-spacing:.3px}
+.guide-divider{width:2px;height:42px;background:#CBD5E1}
+.guide-main-title h1{margin:0;font-size:1.55rem;color:#0F172A;line-height:1.2}
+.guide-main-title p{margin:2px 0 0;font-size:1.05rem;color:#475569;font-weight:600}
+.guide-dear-patient{
+  max-width:280px;
+  font-size:0.8rem;
+  line-height:1.35;
+  color:#334155;
+  background:#F8FAFC;
+  border-left:3px solid #0284C7;
+  padding:6px 10px;
+  border-radius:4px;
+}
+
+/* Patient Info Banner */
+.patient-info-banner{
+  background:#F0F9FF;
+  border:1px solid #BAE6FD;
+  border-radius:10px;
+  padding:12px 18px;
+  margin:16px 0 20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+  gap:12px;
+}
+.pib-item{display:flex;align-items:center;gap:10px}
+.pib-icon{
+  width:36px;
+  height:36px;
+  border-radius:8px;
+  background:#E0F2FE;
+  color:#0369A1;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+}
+.pib-label{font-size:0.75rem;color:#64748B;font-weight:600;text-transform:uppercase}
+.pib-val{font-size:1.05rem;font-weight:700;color:#0F172A}
+
+/* The Main Routine Table */
+.table-responsive{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:1.1rem;
+  margin:10px 0 20px;
+  background:#fff;
+}
+.guide-table th{
+  background:#0F3B66;
+  color:#fff;
+  font-size:0.88rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.3px;
+  padding:10px 8px;
+  text-align:center;
+  border:1px solid #0B2D4F;
+  vertical-align:middle;
+}
+.guide-table td{
+  border:1px solid #CBD5E1;
+  padding:12px 8px;
+  text-align:center;
+  vertical-align:middle;
+  color:#0F172A;
+}
+.guide-table tr:nth-child(even) td{background:#F8FAFC}
+
+/* Row elements */
+.step-badge{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:#16A34A;
+  color:#fff;
+  font-weight:700;
+  font-size:1.05rem;
+  display:inline-grid;
+  place-items:center;
+  box-shadow:0 2px 4px rgba(22,163,74,0.3);
+}
+.med-cell{
+  text-align:left !important;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.med-mini-img{
+  width:72px;
+  height:54px;
+  border-radius:6px;
+  border:1px solid #CBD5E1;
+  background:#F1F5F9;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  padding:2px;
+}
+.med-name-col b{font-size:1.2rem;color:#0F172A;display:block}
+.med-name-col span{font-size:0.95rem;color:#475569;font-weight:600}
+
+/* Time Slots (1-0-1-0) Display */
+.slot-grid{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  min-width:185px;
+}
+.slot-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  flex-shrink:0;
+}
+.slot-icon{color:#D97706;font-size:0.9rem;display:flex;align-items:center;justify-content:center}
+.slot-icon.moon{color:#4338CA}
+.slot-lbl{font-size:0.65rem;font-weight:700;color:#64748B}
+.slot-val{
+  width:34px;
+  height:30px;
+  border-radius:6px;
+  font-weight:800;
+  font-size:1.1rem;
+  display:grid;
+  place-items:center;
+}
+.slot-val.on{
+  background:#DCFCE7;
+  color:#15803D;
+  border:1.5px solid #86EFAC;
+}
+.slot-val.off{
+  background:#F1F5F9;
+  color:#94A3B8;
+  border:1.5px solid #E2E8F0;
+}
+
+/* Manual checklist empty space */
+.manual-box-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+}
+.manual-check-box{
+  width:30px;
+  height:30px;
+  border:2.5px solid #334155;
+  border-radius:6px;
+  background:#fff;
+  cursor:pointer;
+}
+.manual-box-lbl{
+  font-size:0.68rem;
+  color:#64748B;
+  font-weight:600;
+}
+
+/* Bottom Supportive Info Cards */
+.guide-bottom-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:16px;
+  margin-top:20px;
+}
+.g-card{
+  background:#F8FAFC;
+  border:1px solid #E2E8F0;
+  border-radius:10px;
+  padding:14px;
+}
+.g-card h3{
+  margin:0 0 10px;
+  font-size:1.05rem;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#0F172A;
+}
+.timing-list{display:flex;flex-direction:column;gap:6px;font-size:0.95rem}
+.timing-row{display:flex;justify-content:space-between;border-bottom:1px dashed #CBD5E1;padding-bottom:3px}
+.timing-key{display:flex;align-items:center;gap:6px;font-weight:600}
+.timing-val{color:#334155;font-weight:700}
+.format-pill{
+  margin-top:10px;
+  background:#DCFCE7;
+  border:1px solid #86EFAC;
+  color:#15803D;
+  font-weight:700;
+  font-size:0.85rem;
+  padding:4px 8px;
+  border-radius:6px;
+  text-align:center;
+}
+.notes-list{margin:0;padding-left:18px;font-size:0.92rem;color:#334155;line-height:1.45}
+.notes-list li{margin-bottom:4px}
+.refill-badge{
+  font-size:1.25rem;
+  font-weight:800;
+  color:#0369A1;
+  background:#E0F2FE;
+  padding:6px 12px;
+  border-radius:8px;
+  display:inline-block;
+  margin:6px 0;
+}
+.guide-footer-note{
+  text-align:center;
+  font-size:0.85rem;
+  color:#64748B;
+  margin-top:24px;
+  padding-top:12px;
+  border-top:1px solid #E2E8F0;
+}
+
+/* Printing Optimization */
+@media print{
+  @page{
+    size: A4 portrait;
+    margin: 6mm 8mm;
+  }
+  html, body{
+    overflow: visible !important;
+    height: auto !important;
+    width: 100% !important;
+    background: #fff !important;
+    color: #0F172A !important;
+  }
+  *, *::before, *::after{
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    overflow: visible !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  *::-webkit-scrollbar{
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  .noprint,header,.drawer,.modal{display:none !important}
+  main{max-width:100% !important;padding:0 !important;margin:0 !important}
+  .table-responsive{overflow:visible !important}
+  .routine-doc{
+    border:none !important;
+    box-shadow:none !important;
+    padding:0 !important;
+    margin:0 !important;
+  }
+  .guide-table{
+    width:100% !important;
+    font-size:12pt !important;
+    page-break-inside:auto;
+  }
+  .guide-table th{
+    background:#0F3B66 !important;
+    color:#fff !important;
+    padding:8px 4px !important;
+    font-size:10pt !important;
+    font-weight:900 !important;
+  }
+  .guide-table td{
+    padding:8px 4px !important;
+    font-size:11.5pt !important;
+    border:1.5px solid #64748B !important;
+  }
+  .med-name-col b{
+    font-size:14pt !important;
+    font-weight:900 !important;
+  }
+  .med-name-col span{
+    font-size:10.5pt !important;
+    font-weight:700 !important;
+  }
+  .step-badge{
+    background:#16A34A !important;
+    color:#fff !important;
+    width:28px !important;
+    height:28px !important;
+    font-size:11pt !important;
+  }
+  .slot-val.on{
+    background:#DCFCE7 !important;
+    color:#15803D !important;
+    border:2px solid #16A34A !important;
+    font-size:13pt !important;
+    font-weight:900 !important;
+    width:28px !important;
+    height:28px !important;
+  }
+  .slot-val.off{
+    background:#F1F5F9 !important;
+    color:#94A3B8 !important;
+    border:1px solid #CBD5E1 !important;
+    font-size:13pt !important;
+    font-weight:900 !important;
+    width:28px !important;
+    height:28px !important;
+  }
+  .manual-check-box{
+    border:2.5px solid #0F172A !important;
+    background:#fff !important;
+    width:28px !important;
+    height:28px !important;
+  }
+  .guide-bottom-grid{
+    gap:10px !important;
+    margin-top:12px !important;
+  }
+  .g-card{
+    padding:8px !important;
+    font-size:9pt !important;
+  }
+}
 </style></head><body><div id="app"></div><script>
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const addD=(d,n)=>new Date(new Date(d).getTime()+n*864e5),iso=d=>new Date(d).toLocaleDateString('en-CA'),fd=d=>new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-const FQ={ONCE_DAILY:1,TWICE_DAILY:2,THRICE_DAILY:3},SL=['MORNING','AFTERNOON','EVENING','BEDTIME'],ICO={MORNING:'sunrise',AFTERNOON:'sun',EVENING:'sunset',BEDTIME:'bed-double'};
-const MEDS=[['Metformin','500mg'],['Paracetamol','650mg'],['Amlodipine','5mg'],['Atorvastatin','10mg']],PC=MEDS.map((m,i)=>({id:i+1,n:m[0].toUpperCase(),s:m[1]}));
-const T={en:{title:'Your daily medicine routine',patient:'Patient',issued:'Date issued',doctor:'Doctor',helpline:'Hospital helpline',MORNING:'Morning',AFTERNOON:'Afternoon',EVENING:'Evening',BEDTIME:'Bedtime',BEFORE_FOOD:'Before food',AFTER_FOOD:'After food',WITH_FOOD:'With food',EMPTY_STOMACH:'Empty stomach',ONCE_DAILY:'Once daily',TWICE_DAILY:'Twice daily',THRICE_DAILY:'Three times daily',dose:'Dose',when:'When',duration:'Duration',days:'days',ends:'Ends on',rev:'Review date:',lt:'Long-term medicine. Review date:',nd:'Not specified. Ask your doctor.',pic:'Picture is a guide only. Always check the name on the box.',nopic:'Check the name printed on your medicine box.',taken:'Taken',listen:'Listen',allergy:'Allergies',note:'Doctor’s note',miss:'If a dose is missed',sup:'Contact the pharmacy for a refill by',tablet:'tablet',capsule:'capsule',ml:'ml',units:'units'},
-hi:{title:'आपकी दैनिक दवा सूची',patient:'मरीज़',issued:'जारी करने की तारीख',doctor:'डॉक्टर',helpline:'अस्पताल हेल्पलाइन',MORNING:'सुबह',AFTERNOON:'दोपहर',EVENING:'शाम',BEDTIME:'सोने से पहले',BEFORE_FOOD:'खाने से पहले',AFTER_FOOD:'खाने के बाद',WITH_FOOD:'खाने के साथ',EMPTY_STOMACH:'खाली पेट',ONCE_DAILY:'दिन में एक बार',TWICE_DAILY:'दिन में दो बार',THRICE_DAILY:'दिन में तीन बार',dose:'मात्रा',when:'कब',duration:'अवधि',days:'दिन',ends:'समाप्ति तिथि',rev:'अगली जांच की तारीख:',lt:'लंबे समय की दवा। अगली जांच की तारीख:',nd:'निर्दिष्ट नहीं। अपने डॉक्टर से पूछें।',pic:'चित्र केवल सहायता के लिए है। डिब्बे पर नाम ज़रूर जांचें।',nopic:'दवा के डिब्बे पर छपा नाम जांचें।',taken:'ले ली',listen:'सुनें',allergy:'एलर्जी',note:'डॉक्टर का निर्देश',miss:'खुराक छूट जाए तो',sup:'दवा खत्म होने से पहले फार्मेसी से संपर्क करें:',tablet:'गोली',capsule:'कैप्सूल',ml:'मिली',units:'यूनिट'},
-kn:{title:'ನಿಮ್ಮ ದೈನಂದಿನ ಔಷಧ ವೇಳಾಪಟ್ಟಿ',patient:'ರೋಗಿ',issued:'ನೀಡಿದ ದಿನಾಂಕ',doctor:'ವೈದ್ಯರು',helpline:'ಆಸ್ಪತ್ರೆ ಸಹಾಯವಾಣಿ',MORNING:'ಬೆಳಿಗ್ಗೆ',AFTERNOON:'ಮಧ್ಯಾಹ್ನ',EVENING:'ಸಂಜೆ',BEDTIME:'ಮಲಗುವ ಮುನ್ನ',BEFORE_FOOD:'ಊಟಕ್ಕೆ ಮುಂಚೆ',AFTER_FOOD:'ಊಟದ ನಂತರ',WITH_FOOD:'ಊಟದ ಜೊತೆ',EMPTY_STOMACH:'ಖಾಲಿ ಹೊಟ್ಟೆಯಲ್ಲಿ',ONCE_DAILY:'ದಿನಕ್ಕೆ ಒಮ್ಮೆ',TWICE_DAILY:'ದಿನಕ್ಕೆ ಎರಡು ಬಾರಿ',THRICE_DAILY:'ದಿನಕ್ಕೆ ಮೂರು ಬಾರಿ',dose:'ಪ್ರಮಾಣ',when:'ಯಾವಾಗ',duration:'ಅವಧಿ',days:'ದಿನಗಳು',ends:'ಕೊನೆಯ ದಿನಾಂಕ',rev:'ಮುಂದಿನ ತಪಾಸಣೆ ದಿನಾಂಕ:',lt:'ದೀರ್ಘಕಾಲದ ಔಷಧ. ಮುಂದಿನ ತಪಾಸಣೆ ದಿನಾಂಕ:',nd:'ನಿರ್ದಿಷ್ಟಪಡಿಸಿಲ್ಲ. ನಿಮ್ಮ ವೈದ್ಯರನ್ನು ಕೇಳಿ.',pic:'ಚಿತ್ರ ಕೇವಲ ಸಹಾಯಕ್ಕಾಗಿ. ಪೆಟ್ಟಿಗೆಯ ಮೇಲಿನ ಹೆಸರನ್ನು ಯಾವಾಗಲೂ ಪರಿಶೀಲಿಸಿ.',nopic:'ಔಷಧದ ಪೆಟ್ಟಿಗೆಯ ಮೇಲೆ ಮುದ್ರಿತ ಹೆಸರನ್ನು ನೋಡಿ.',taken:'ತೆಗೆದುಕೊಂಡೆ',listen:'ಕೇಳಿ',allergy:'ಅಲರ್ಜಿ',note:'ವೈದ್ಯರ ಸೂಚನೆ',miss:'ಡೋಸ್ ತಪ್ಪಿದರೆ',sup:'ಔಷಧ ಮುಗಿಯುವ ಮೊದಲು ಔಷಧಾಲಯವನ್ನು ಸಂಪರ್ಕಿಸಿ:',tablet:'ಮಾತ್ರೆ',capsule:'ಕ್ಯಾಪ್ಸೂಲ್',ml:'ಮಿಲಿ',units:'ಯೂನಿಟ್'}};
-const mk=(g,s,fr,sl,fo,dt,dy,o={})=>({gen:g,brand:'',strength:s,dose:1,unit:'tablet',freq:fr,slots:sl,food:fo,dtype:dt,days:dy,info:'',miss:'',qty:'',qd:'',pc:'',ok:0,...o});
+const addD=(d,n)=>new Date(new Date(d).getTime()+n*864e5),iso=d=>new Date(d).toLocaleDateString('en-CA'),fd=d=>new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+const FQ={ONCE_DAILY:1,TWICE_DAILY:2,THRICE_DAILY:3},SL=['MORNING','AFTERNOON','EVENING','BEDTIME'],ICO={MORNING:'sunrise',AFTERNOON:'sun',EVENING:'sunset',BEDTIME:'moon'};
+const MEDS=[['Metformin','500mg'],['Paracetamol','650mg'],['Amlodipine','5mg'],['Atorvastatin','10mg'],['Amoxicillin','500mg'],['Pantoprazole','40mg']];
+const PC=MEDS.map((m,i)=>({id:i+1,n:m[0].toUpperCase(),s:m[1]}));
+
+const T={
+  en:{
+    title:'Your Medication Routine',sub:'Patient Checklist Guide',
+    patient:'Patient Name',age:'Age',issued:'Prescription Issued On',doctor:'Doctor',pharmacy:'Pharmacy',
+    helpline:'Helpline',MORNING:'Morning',AFTERNOON:'Afternoon',EVENING:'Evening',BEDTIME:'Night',
+    BEFORE_FOOD:'Before food',AFTER_FOOD:'After food',WITH_FOOD:'With food',EMPTY_STOMACH:'Empty stomach',
+    ONCE_DAILY:'Once daily',TWICE_DAILY:'Twice daily',THRICE_DAILY:'Three times daily',
+    dose:'Dose',when:'When',duration:'Duration',days:'days',ends:'Ends on',rev:'Review date:',
+    lt:'Long term',nd:'As advised by doctor',allergy:'Allergies',note:'Special instructions',
+    miss:'If missed',sup:'Refill due around',tablet:'Tablet',capsule:'Capsule',ml:'ml',units:'units'
+  },
+  hi:{
+    title:'आपकी दैनिक दवा सूची',sub:'रोगी नियमित मार्गदर्शिका',
+    patient:'मरीज़ का नाम',age:'उम्र',issued:'जारी करने की तारीख',doctor:'डॉक्टर',pharmacy:'फार्मेसी',
+    helpline:'हेल्पलाइन',MORNING:'सुबह',AFTERNOON:'दोपहर',EVENING:'शाम',BEDTIME:'रात',
+    BEFORE_FOOD:'खाने से पहले',AFTER_FOOD:'खाने के बाद',WITH_FOOD:'खाने के साथ',EMPTY_STOMACH:'खाली पेट',
+    ONCE_DAILY:'दिन में एक बार',TWICE_DAILY:'दिन में दो बार',THRICE_DAILY:'दिन में तीन बार',
+    dose:'मात्रा',when:'कब',duration:'अवधि',days:'दिन',ends:'समाप्ति',rev:'अगली जांच:',
+    lt:'दीर्घकालिक',nd:'डॉक्टर के निर्देशानुसार',allergy:'एलर्जी',note:'विशेष निर्देश',
+    miss:'खुराक छूटने पर',sup:'रिफिल नियत तारीख',tablet:'गोली',capsule:'कैप्सूल',ml:'मिली',units:'यूनिट'
+  },
+  kn:{
+    title:'ನಿಮ್ಮ ಔಷಧ ವೇಳಾಪಟ್ಟಿ',sub:'ರೋಗಿ ತಪಾಸಣೆ ಮಾರ್ಗದರ್ಶಿ',
+    patient:'ರೋಗಿಯ ಹೆಸರು',age:'ವಯಸ್ಸು',issued:'ನೀಡಿದ ದಿನಾಂಕ',doctor:'ವೈದ್ಯರು',pharmacy:'ಔಷಧಾಲಯ',
+    helpline:'ಸಹಾಯವಾಣಿ',MORNING:'ಬೆಳಿಗ್ಗೆ',AFTERNOON:'ಮಧ್ಯಾಹ್ನ',EVENING:'ಸಂಜೆ',BEDTIME:'ರಾತ್ರಿ',
+    BEFORE_FOOD:'ಊಟಕ್ಕೆ ಮುಂಚೆ',AFTER_FOOD:'ಊಟದ ನಂತರ',WITH_FOOD:'ಊಟದ ಜೊತೆ',EMPTY_STOMACH:'ಖಾಲಿ ಹೊಟ್ಟೆಯಲ್ಲಿ',
+    ONCE_DAILY:'ದಿನಕ್ಕೆ ಒಮ್ಮೆ',TWICE_DAILY:'ದಿನಕ್ಕೆ ಎರಡು ಬಾರಿ',THRICE_DAILY:'ದಿನಕ್ಕೆ ಮೂರು ಬಾರಿ',
+    dose:'ಪ್ರಮಾಣ',when:'ಯಾವಾಗ',duration:'ಅವಧಿ',days:'ದಿನಗಳು',ends:'ಕೊನೆಗೊಳ್ಳುವ ದಿನಾಂಕ',rev:'ಮರುಪರಿಶೀಲನೆ:',
+    lt:'ದೀರ್ಘಕಾಲೀನ',nd:'ವೈದ್ಯರ ಸಲಹೆಯಂತೆ',allergy:'ಅಲರ್ಜಿ',note:'ವಿಶೇಷ ಸೂಚನೆಗಳು',
+    miss:'ಡೋಸ್ ತಪ್ಪಿದರೆ',sup:'ಮರುಪೂರಣ ದಿನಾಂಕ',tablet:'ಮಾತ್ರೆ',capsule:'ಕ್ಯಾಪ್ಸೂಲ್',ml:'ಮಿಲಿ',units:'ಯೂನಿಟ್'
+  }
+};
+
+const mk=(g,s,fr,sl,fo,dt,dy,o={})=>({gen:g,brand:'',strength:s,dose:1,unit:'Tablet',freq:fr,slots:sl,food:fo,dtype:dt,days:dy,info:'',miss:'',qty:'',qd:'',pc:'',ok:0,...o});
 const blank=()=>mk('','','',[],'NOT_SPECIFIED','','');
-let S={patients:[{id:1,name:'Lakshmi Gowda (sample)',phone:'+91 90000 00001',dob:'1950-03-12',lang:'kn',cg:'Suresh (son)',cgp:'+91 90000 00002',allergy:''},{id:2,name:'Ramesh Sharma (sample)',phone:'+91 90000 00003',dob:'1948-07-01',lang:'hi',cg:'',cgp:'',allergy:'Penicillin'}],rx:[],taken:{},view:'doctor',pid:null,items:[],err:[],lang:'en',big:0,hc:0,drawer:0,modal:null,gid:null,add:0,diag:'',review:'',refill:iso(addD(new Date(),14)),doc:{name:'Dr. Anita Rao (sample)',nmc:'NMC-SAMPLE-0000',hosp:'Sample City Hospital',phone:'080 0000 0000'}};
-S.rx=[{id:1,pid:1,doc:S.doc,diag:'Type 2 diabetes, hypertension (sample)',issued:iso(new Date()),refill:S.refill,review:iso(addD(new Date(),30)),status:'ACTIVE',verified:false,items:[mk('METFORMIN','500mg','TWICE_DAILY',['MORNING','EVENING'],'AFTER_FOOD','LONG_TERM',''),mk('AMLODIPINE','5mg','ONCE_DAILY',['MORNING'],'NOT_SPECIFIED','LONG_TERM',''),mk('PARACETAMOL','650mg','THRICE_DAILY',['MORNING','AFTERNOON','EVENING'],'AFTER_FOOD','FIXED_DAYS',3,{info:'Only for fever, as written by the doctor (sample).'})]}];
-try{const z=JSON.parse(localStorage.getItem('mm')||'null');if(z){S.patients=z.patients;S.rx=z.rx;S.taken=z.taken}}catch(e){}
+
+let S={
+  patients:[
+    {id:1,name:'Ravi Kumar',phone:'+91 98450 12345',dob:'1958-04-15',lang:'en',cg:'Anil Kumar (son)',cgp:'+91 98450 54321',allergy:''},
+    {id:2,name:'Lakshmi Gowda',phone:'+91 90000 00001',dob:'1950-03-12',lang:'kn',cg:'Suresh (son)',cgp:'+91 90000 00002',allergy:''},
+    {id:3,name:'Ramesh Sharma',phone:'+91 90000 00003',dob:'1948-07-01',lang:'hi',cg:'',cgp:'',allergy:'Penicillin'}
+  ],
+  rx:[],
+  taken:{},
+  view:'doctor',
+  pid:null,
+  items:[],
+  err:[],
+  lang:'en',
+  big:0,
+  hc:0,
+  drawer:0,
+  modal:null,
+  gid:null,
+  add:0,
+  diag:'Hypertension, Type 2 Diabetes',
+  review:'',
+  refill:iso(addD(new Date(),14)),
+  doc:{name:'Dr. Sharma (Cardiologist)',nmc:'NMC-98721',hosp:'MedMitra Central Hospital',phone:'1800 123 4567'}
+};
+
+// Seed sample prescription matching the routine layout
+S.rx=[{
+  id:1,
+  pid:1,
+  doc:S.doc,
+  diag:'Type 2 diabetes & hypertension',
+  issued:iso(new Date()),
+  refill:iso(addD(new Date(),14)),
+  review:iso(addD(new Date(),90)),
+  status:'ACTIVE',
+  verified:true,
+  items:[
+    mk('Amoxicillin','500 mg','TWICE_DAILY',['MORNING','EVENING'],'AFTER_FOOD','FIXED_DAYS',5,{unit:'Capsule',info:'Complete the full course.',pc:5}),
+    mk('Metformin','500 mg','TWICE_DAILY',['MORNING','EVENING'],'WITH_FOOD','LONG_TERM','',{unit:'Tablet',info:'Do not skip doses. Review in 3 months.',pc:1}),
+    mk('Amlodipine','5 mg','ONCE_DAILY',['AFTERNOON'],'AFTER_FOOD','LONG_TERM','',{unit:'Tablet',info:'Monitor blood pressure regularly.',pc:3}),
+    mk('Pantoprazole','40 mg','ONCE_DAILY',['MORNING'],'BEFORE_FOOD','FIXED_DAYS',14,{unit:'Tablet',info:'Take on an empty stomach 30 mins before food.',pc:6})
+  ]
+}];
+
+try{const z=JSON.parse(localStorage.getItem('mm')||'null');if(z){S.patients=z.patients||S.patients;S.rx=z.rx||S.rx;S.taken=z.taken||S.taken}}catch(e){}
 const save=()=>{try{localStorage.setItem('mm',JSON.stringify({patients:S.patients,rx:S.rx,taken:S.taken}))}catch(e){}};
 const P=id=>S.patients.find(p=>p.id==id),R=id=>S.rx.find(r=>r.id==id),ic=n=>`<i data-lucide="${n}"></i>`;
 const go=(v,id)=>{S.view=v;S.gid=id??S.gid;S.modal=null;S.drawer=0;render();scrollTo(0,0)};
-const pack=(n,s)=>`<svg viewBox="0 0 160 100" class="pk" role="img" aria-label="${esc(n)} ${esc(s)} sample pack"><rect x="4" y="4" width="152" height="92" rx="8" fill="#fff" stroke="#0284C7" stroke-width="3"/><rect x="4" y="4" width="152" height="24" rx="8" fill="#0284C7"/><text x="80" y="21" text-anchor="middle" font-size="11" fill="#fff" font-family="sans-serif">SAMPLE – FICTIONAL</text><text x="80" y="58" text-anchor="middle" font-size="15" font-weight="700" fill="#0F172A" font-family="sans-serif">${esc(n)}</text><text x="80" y="80" text-anchor="middle" font-size="14" fill="#0F172A" font-family="sans-serif">${esc(s)}</text></svg>`;
-const sup=m=>{const d=+m.dose*m.slots.length;return +m.qd>0&&d>0?Math.floor(m.qd/d):null};
-const dur=(m,r,L)=>m.dtype=='FIXED_DAYS'?`${m.days} ${L.days}. ${L.ends} ${fd(addD(r.issued,m.days))}`:m.dtype=='UNTIL_REVIEW'?`${L.rev} ${fd(r.review)}`:m.dtype=='LONG_TERM'?`${L.lt} ${r.review?fd(r.review):'–'}`:L.nd;
-function dups(){const n={};let out=[];const add=g=>{g=g.trim().toLowerCase();if(!g)return;if(n[g])out.push(g);n[g]=1};S.items.forEach(m=>add(m.gen));S.rx.filter(r=>r.pid==S.pid&&r.status=='ACTIVE').forEach(r=>r.items.forEach(m=>{const g=m.gen.toLowerCase();if(S.items.some(x=>x.gen.trim().toLowerCase()==g))out.push(g)}));return[...new Set(out)]}
-function tg(i,s){const m=S.items[i],k=m.slots.indexOf(s);k<0?m.slots.push(s):m.slots.splice(k,1);render()}
-function chip(n,s){S.items.push(mk(n.toUpperCase(),s,'',[],'NOT_SPECIFIED','',''));render()}
-function find(q){q=q.toLowerCase();$('#res').innerHTML=q?S.patients.filter(p=>(p.name+p.phone).toLowerCase().includes(q)).map(p=>`<button class="btn" onclick="S.pid=${p.id};render()">${esc(p.name)} · ${esc(p.phone)}</button>`).join(' ')||'<span class="mut">No match. Use “Add new patient”.</span>':''}
-function addP(){const f=id=>$('#'+id).value.trim();if(!f('pn')||!/^\+?[\d\s]{10,14}$/.test(f('pp'))||!$('#pc').checked){S.err=['Enter name, a valid phone number and tick the consent box.'];return render()}const p={id:Date.now(),name:f('pn'),phone:f('pp'),dob:f('pd'),lang:f('pl'),cg:f('pcn'),cgp:f('pcp'),allergy:f('pa')};S.patients.push(p);S.pid=p.id;S.add=0;S.err=[];save();render()}
-function submit(){const e=[],p=P(S.pid);if(!p)e.push('Select or register a patient.');if(!S.items.length)e.push('Add at least one medicine.');S.items.forEach((m,i)=>{const n='Medicine '+(i+1)+': ';if(!m.gen.trim())e.push(n+'name is required.');if(!(+m.dose>0))e.push(n+'dose must be a number above 0.');if(!m.freq)e.push(n+'choose a frequency.');else if(m.slots.length!=FQ[m.freq])e.push(n+'select exactly '+FQ[m.freq]+' time slot(s).');if(!m.dtype)e.push(n+'choose a duration type.');if(m.dtype=='FIXED_DAYS'&&!(+m.days>0))e.push(n+'enter the number of days.');if(m.dtype=='UNTIL_REVIEW'&&!S.review)e.push(n+'set a review date.');if(m.dtype=='NOT_SPECIFIED'&&!m.ok)e.push(n+'tick “I confirm no duration”.')});S.err=e;if(e.length)return render();
-const r={id:Date.now(),pid:p.id,doc:{...S.doc},diag:S.diag,issued:iso(new Date()),refill:S.refill,review:S.review,status:'ACTIVE',verified:false,items:JSON.parse(JSON.stringify(S.items))};S.rx.unshift(r);S.items=[];S.diag='';S.review='';S.pid=null;S.gid=r.id;S.modal=r.id;save();render()}
-function disp(id){const r=R(id);if(!$('#vf').checked||r.items.some(m=>!m.pc)){S.err=['Choose the dispensed product for every medicine and tick the verification box.'];return render()}r.verified=true;r.status='DISPENSED';S.err=[];save();go('guide',id)}
-const tk=(k,v)=>{S.taken[k]=v;save()},say=id=>{const u=new SpeechSynthesisUtterance($('#'+id).innerText);u.lang={en:'en-IN',hi:'hi-IN',kn:'kn-IN'}[S.lang];speechSynthesis.cancel();speechSynthesis.speak(u)};
+
+const calcAge=dob=>{
+  if(!dob)return '68 years';
+  const diff=Date.now()-new Date(dob).getTime();
+  const a=Math.abs(new Date(diff).getUTCFullYear()-1970);
+  return `${a} years`;
+};
+
+const packMiniSvg=(name,str)=>`
+<svg viewBox="0 0 100 68" style="width:100%;height:100%" role="img">
+  <rect x="3" y="3" width="94" height="62" rx="6" fill="#FFFFFF" stroke="#0284C7" stroke-width="2"/>
+  <rect x="3" y="3" width="94" height="18" rx="5" fill="#0284C7"/>
+  <circle cx="16" cy="12" r="4" fill="#FFFFFF"/>
+  <text x="50" y="15" text-anchor="middle" font-size="9" fill="#FFFFFF" font-family="sans-serif" font-weight="bold">Rx MEDICINE</text>
+  <text x="50" y="38" text-anchor="middle" font-size="10" font-weight="800" fill="#0F172A" font-family="sans-serif">${esc(name.substring(0,9))}</text>
+  <text x="50" y="52" text-anchor="middle" font-size="9" fill="#0284C7" font-weight="700" font-family="sans-serif">${esc(str)}</text>
+</svg>`;
+
+const durText=(m,r,L)=>{
+  if(m.dtype=='FIXED_DAYS')return `${m.days} ${L.days}<br><span style="font-size:0.85em;color:#64748B">(${fd(r.issued)} – ${fd(addD(r.issued,m.days))})</span>`;
+  if(m.dtype=='LONG_TERM')return `${L.lt}<br><span style="font-size:0.85em;color:#64748B">(${r.review? 'Review: '+fd(r.review) : 'Regular checkup'})</span>`;
+  if(m.dtype=='UNTIL_REVIEW')return `${L.rev}<br><span style="font-size:0.85em;color:#64748B">${r.review?fd(r.review):'–'}</span>`;
+  return L.nd;
+};
+
+function dups(){
+  const n={};let out=[];
+  const add=g=>{g=g.trim().toLowerCase();if(!g)return;if(n[g])out.push(g);n[g]=1};
+  S.items.forEach(m=>add(m.gen));
+  S.rx.filter(r=>r.pid==S.pid&&r.status=='ACTIVE').forEach(r=>r.items.forEach(m=>{
+    const g=m.gen.toLowerCase();if(S.items.some(x=>x.gen.trim().toLowerCase()==g))out.push(g);
+  }));
+  return[...new Set(out)];
+}
+
+function tg(i,s){
+  const m=S.items[i],k=m.slots.indexOf(s);
+  k<0?m.slots.push(s):m.slots.splice(k,1);
+  render();
+}
+
+function chip(n,s){
+  S.items.push(mk(n,s,'',[],'NOT_SPECIFIED','',''));
+  render();
+}
+
+function find(q){
+  q=q.toLowerCase();
+  $('#res').innerHTML=q?S.patients.filter(p=>(p.name+p.phone).toLowerCase().includes(q)).map(p=>`<button class="btn" onclick="S.pid=${p.id};render()">${esc(p.name)} · ${esc(p.phone)}</button>`).join(' ')||'<span class="mut">No match found. Use “Add new patient”.</span>':''
+}
+
+function addP(){
+  const f=id=>$('#'+id).value.trim();
+  if(!f('pn')||!/^\+?[\d\s]{10,14}$/.test(f('pp'))||!$('#pc').checked){
+    S.err=['Enter name, a valid phone number and tick the consent box.'];return render();
+  }
+  const p={id:Date.now(),name:f('pn'),phone:f('pp'),dob:f('pd'),lang:f('pl'),cg:f('pcn'),cgp:f('pcp'),allergy:f('pa')};
+  S.patients.push(p);S.pid=p.id;S.add=0;S.err=[];save();render();
+}
+
+function submit(){
+  const e=[],p=P(S.pid);
+  if(!p)e.push('Select or register a patient.');
+  if(!S.items.length)e.push('Add at least one medicine.');
+  S.items.forEach((m,i)=>{
+    const n='Medicine '+(i+1)+': ';
+    if(!m.gen.trim())e.push(n+'name is required.');
+    if(!(+m.dose>0))e.push(n+'dose must be a number above 0.');
+    if(!m.freq)e.push(n+'choose a frequency.');
+    else if(m.slots.length!=FQ[m.freq])e.push(n+'select exactly '+FQ[m.freq]+' time slot(s).');
+    if(!m.dtype)e.push(n+'choose a duration type.');
+    if(m.dtype=='FIXED_DAYS'&&!(+m.days>0))e.push(n+'enter the number of days.');
+    if(m.dtype=='UNTIL_REVIEW'&&!S.review)e.push(n+'set a review date.');
+    if(m.dtype=='NOT_SPECIFIED'&&!m.ok)e.push(n+'tick “I confirm no duration”.');
+  });
+  S.err=e;
+  if(e.length)return render();
+
+  const r={
+    id:Date.now(),pid:p.id,doc:{...S.doc},diag:S.diag,
+    issued:iso(new Date()),refill:S.refill,review:S.review,status:'ACTIVE',verified:false,
+    items:JSON.parse(JSON.stringify(S.items))
+  };
+  S.rx.unshift(r);S.items=[];S.diag='';S.review='';S.pid=null;S.gid=r.id;S.modal=r.id;save();render();
+}
+
+function disp(id){
+  const r=R(id);
+  if(!$('#vf')||!$('#vf').checked||r.items.some(m=>!m.pc)){
+    S.err=['Choose the dispensed product for every medicine and tick the verification box.'];
+    return render();
+  }
+  r.verified=true;r.status='DISPENSED';S.err=[];save();
+  go('guide',id);
+}
+
 const errs=()=>S.err.length?`<div class="bad" role="alert">${S.err.map(esc).join('<br>')}</div>`:'';
-function doctor(){const p=P(S.pid),d=dups(),D=S.doc;return`${errs()}<section class="card"><h2>1. Patient</h2>${p?`<div class="row"><b style="font-size:1.2em">${esc(p.name)}</b><span class="mut">${esc(p.phone)}</span>${p.allergy?`<span class="bad" style="margin:0;padding:2px 10px">${ic('alert-triangle')} Allergy: ${esc(p.allergy)}</span>`:''}<button class="btn" onclick="S.pid=null;render()">Change</button></div>`:S.add?`<div class="g"><div><label>Name</label><input id="pn"></div><div><label>Phone (+91)</label><input id="pp" inputmode="tel"></div><div><label>Date of birth</label><input id="pd" type="date"></div><div><label>Guide language</label><select id="pl"><option value="en">English</option><option value="hi">हिन्दी</option><option value="kn">ಕನ್ನಡ</option></select></div><div><label>Caregiver name</label><input id="pcn"></div><div><label>Caregiver phone</label><input id="pcp"></div><div><label>Allergies (optional)</label><input id="pa"></div></div><label class="tk" style="margin:10px 0"><input type="checkbox" id="pc"> Patient agrees to storage of health data and reminders (DPDP Act).</label><button class="btn p" onclick="addP()">${ic('save')} Save patient</button> <button class="btn" onclick="S.add=0;render()">Cancel</button>`:`<input id="q" placeholder="Search by phone or name" oninput="find(this.value)"><div id="res" class="row" style="margin-top:8px"></div><button class="btn" style="margin-top:8px" onclick="S.add=1;render()">${ic('user-plus')} Add new patient</button>`}</section>
-<section class="card"><h2>2. Prescription</h2><div class="g"><div><label>Doctor</label><input value="${esc(D.name)}" oninput="S.doc.name=this.value"></div><div><label>NMC registration no.</label><input value="${esc(D.nmc)}" oninput="S.doc.nmc=this.value"></div><div><label>Hospital</label><input value="${esc(D.hosp)}" oninput="S.doc.hosp=this.value"></div><div><label>Hospital helpline</label><input value="${esc(D.phone)}" oninput="S.doc.phone=this.value"></div><div><label>Diagnosis</label><input value="${esc(S.diag)}" oninput="S.diag=this.value"></div><div><label>Refill due date</label><input type="date" value="${S.refill}" onchange="S.refill=this.value"></div><div><label>Review date (optional)</label><input type="date" value="${S.review}" onchange="S.review=this.value"></div></div>
-<p class="row"><b>Quick add:</b>${MEDS.map(m=>`<button class="btn" onclick="chip('${m[0]}','${m[1]}')">+ ${m[0]} ${m[1]}</button>`).join('')}<button class="btn" onclick="S.items.push(blank());render()">+ Other medicine</button></p>
-${d.length?`<div class="warn">${ic('copy')} Possible duplicate: ${esc(d.join(', '))}. Doctor/pharmacist to review.</div>`:''}
-${S.items.map((m,i)=>`<div class="card"><div class="g"><div><label>Generic name</label><input value="${esc(m.gen)}" oninput="S.items[${i}].gen=this.value.toUpperCase()"></div><div><label>Brand (optional)</label><input value="${esc(m.brand)}" oninput="S.items[${i}].brand=this.value"></div><div><label>Strength</label><input value="${esc(m.strength)}" oninput="S.items[${i}].strength=this.value"></div><div><label>Dose</label><div class="row" style="flex-wrap:nowrap"><input type="number" step="0.5" value="${m.dose}" oninput="S.items[${i}].dose=this.value"><select onchange="S.items[${i}].unit=this.value"><option>tablet</option><option>capsule</option><option>ml</option><option>units</option></select></div></div>
-<div><label>Frequency</label><select onchange="S.items[${i}].freq=this.value;S.items[${i}].slots=[];render()"><option value="">Choose…</option>${Object.keys(FQ).map(f=>`<option value="${f}" ${m.freq==f?'selected':''}>${T.en[f]}</option>`).join('')}</select></div><div><label>Food (as prescribed)</label><select onchange="S.items[${i}].food=this.value">${['NOT_SPECIFIED','BEFORE_FOOD','AFTER_FOOD','WITH_FOOD','EMPTY_STOMACH'].map(f=>`<option value="${f}" ${m.food==f?'selected':''}>${f=='NOT_SPECIFIED'?'Not specified':T.en[f]}</option>`).join('')}</select></div>
-<div><label>Duration</label><select onchange="S.items[${i}].dtype=this.value;render()"><option value="">Choose…</option>${[['FIXED_DAYS','Fixed days'],['UNTIL_REVIEW','Until review'],['LONG_TERM','Long-term'],['NOT_SPECIFIED','Not specified']].map(o=>`<option value="${o[0]}" ${m.dtype==o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div>${m.dtype=='FIXED_DAYS'?`<div><label>Days</label><input type="number" value="${m.days}" oninput="S.items[${i}].days=this.value"></div>`:''}<div><label>Quantity prescribed</label><input type="number" value="${m.qty}" oninput="S.items[${i}].qty=this.value"></div></div>
-<label style="margin-top:8px">Time slots ${m.freq?`(select ${FQ[m.freq]})`:'(choose frequency first)'}</label><div class="row">${SL.map(s=>`<button class="btn ${m.slots.includes(s)?'on':''}" aria-pressed="${m.slots.includes(s)}" onclick="tg(${i},'${s}')">${ic(ICO[s])} ${T.en[s]}</button>`).join('')}</div>
-<div class="g" style="margin-top:8px"><div><label>Additional instructions (shown exactly as written)</label><input value="${esc(m.info)}" oninput="S.items[${i}].info=this.value"></div><div><label>If a dose is missed (optional)</label><input value="${esc(m.miss)}" oninput="S.items[${i}].miss=this.value"></div></div>
-${m.dtype=='NOT_SPECIFIED'?`<label class="tk"><input type="checkbox" ${m.ok?'checked':''} onchange="S.items[${i}].ok=this.checked"> I confirm no duration</label>`:''}<button class="btn" style="margin-top:8px" onclick="S.items.splice(${i},1);render()">${ic('trash-2')} Remove</button></div>`).join('')}
-<button class="btn p" onclick="submit()">${ic('check')} Save & open prescription slip</button></section>`}
-function guide(r){const L=T[S.lang],p=P(r.pid),k=m=>S.taken;return`<div class="row noprint">${['en','hi','kn'].map(l=>`<button class="btn ${S.lang==l?'on':''}" onclick="S.lang='${l}';render()">${{en:'English',hi:'हिन्दी',kn:'ಕನ್ನಡ'}[l]}</button>`).join('')}<button class="btn ${S.big?'on':''}" onclick="S.big^=1;render()">${ic('a-large-small')} Larger text</button><button class="btn ${S.hc?'on':''}" onclick="S.hc^=1;render()">${ic('contrast')} High contrast</button><button class="btn" onclick="print()">${ic('printer')} Print</button><button class="btn" onclick="go('pharm',${r.id})">${ic('pill')} Pharmacy</button></div>
-<h1>${L.title}</h1><div class="card"><div class="g"><div><label>${L.patient}</label><b>${esc(p.name)}</b></div><div><label>${L.issued}</label><b>${fd(r.issued)}</b></div><div><label>${L.doctor}</label><b>${esc(r.doc.name)}</b></div><div><label>${L.helpline}</label><b>${esc(r.doc.phone)}</b></div></div>${p.allergy?`<div class="bad">${ic('alert-triangle')} ${L.allergy}: ${esc(p.allergy)}</div>`:''}</div>
-${SL.map(s=>{const its=r.items.filter(m=>m.slots.includes(s));return its.length?`<section class="blk" id="b-${s}"><h2>${ic(ICO[s])} ${L[s]} <button class="btn noprint" style="margin-left:auto" onclick="say('b-${s}')">${ic('volume-2')} ${L.listen}</button></h2>${its.map(m=>{const key=`${r.id}|${m.gen}|${s}|${iso(new Date())}`,sp=sup(m);return`<div class="card med"><h3>${esc(m.gen)}${m.brand?` (${esc(m.brand)})`:''}</h3><div class="st">${esc(m.strength)}</div>${r.verified&&m.pc?pack(PC.find(c=>c.id==m.pc).n,PC.find(c=>c.id==m.pc).s):''}<div class="g" style="margin-top:8px"><div><label>${L.dose}</label><b>${m.dose} ${L[m.unit]||m.unit}</b></div><div><label>${L.when}</label><b>${L[s]} · ${L[m.freq]}${m.food!='NOT_SPECIFIED'?' · '+L[m.food]:''}</b></div><div><label>${L.duration}</label><b>${dur(m,r,L)}</b></div></div>${m.info?`<p><label>${L.note}</label>${esc(m.info)}</p>`:''}${m.miss?`<p><label>${L.miss}</label>${esc(m.miss)}</p>`:''}${sp!=null?`<p><label>${L.sup}</label><b>${fd(addD(r.issued,sp-3))}</b></p>`:''}<p class="mut">${r.verified&&m.pc?L.pic:L.nopic}</p><label class="tk noprint"><input type="checkbox" ${S.taken[key]?'checked':''} onchange="tk('${key}',this.checked)"> ${L.taken}</label></div>`}).join('')}</section>`:''}).join('')}`}
-function pharm(r){return`${errs()}<h1>Pharmacist verification</h1><p class="mut">${esc(P(r.pid).name)} · <span class="tag">${r.status}</span></p>${r.items.map((m,i)=>`<div class="card"><b style="font-size:1.2em">${esc(m.gen)} ${esc(m.strength)}</b><div class="g"><div><label>Dispensed product (sample cards)</label><select onchange="R(${r.id}).items[${i}].pc=this.value"><option value="">Choose…</option>${PC.map(c=>`<option value="${c.id}" ${m.pc==c.id?'selected':''}>${c.n} ${c.s}</option>`).join('')}</select></div><div><label>Quantity dispensed</label><input type="number" value="${m.qd}" oninput="R(${r.id}).items[${i}].qd=this.value;save()" onchange="render()"></div></div><p>${sup(m)!=null?`Supply lasts about ${sup(m)} days. Contact pharmacy by <b>${fd(addD(r.issued,sup(m)-3))}</b> (3-day reminder lead time).`:'Supply period not established.'}</p></div>`).join('')}<label class="tk"><input type="checkbox" id="vf"> I verified the displayed product matches what is dispensed.</label><p><button class="btn p" onclick="disp(${r.id})">${ic('check-check')} Mark dispensed</button> <button class="btn" onclick="go('guide',${r.id})">Back to guide</button></p>`}
-function slip(r){const p=P(r.pid);return`<div class="modal"><div class="sheet"><div style="border-bottom:3px solid #0284C7;padding-bottom:8px"><h2 style="margin:0">${esc(r.doc.hosp)}</h2><div>${esc(r.doc.phone)}</div></div><p><b>Patient:</b> ${esc(p.name)} · ${esc(p.phone)}<br><b>Date:</b> ${fd(r.issued)} · <b>Diagnosis:</b> ${esc(r.diag)||'–'}${p.allergy?`<br><b>Allergy:</b> ${esc(p.allergy)}`:''}</p><table><tr><th>Medicine</th><th>Dose</th><th>When</th><th>Food</th><th>Duration</th></tr>${r.items.map(m=>`<tr><td><b>${esc(m.gen)}</b>${m.brand?` (${esc(m.brand)})`:''} ${esc(m.strength)}${m.info?`<br><i>${esc(m.info)}</i>`:''}</td><td>${m.dose} ${m.unit}</td><td>${m.slots.map(s=>T.en[s]).join(', ')}</td><td>${m.food=='NOT_SPECIFIED'?'–':T.en[m.food]}</td><td>${dur(m,r,T.en)}</td></tr>`).join('')}</table><p>Refill due: ${fd(r.refill)}${r.review?` · Review: ${fd(r.review)}`:''}</p><div style="display:flex;justify-content:space-between;align-items:end;margin-top:30px"><div style="border:2px dashed #64748B;width:90px;height:90px;display:grid;place-items:center;font-size:12px">QR placeholder</div><div style="text-align:center"><div style="border-top:2px solid #0F172A;width:220px;padding-top:4px">${esc(r.doc.name)}<br>${esc(r.doc.nmc)}</div></div></div><div class="row noprint" style="margin-top:20px"><button class="btn p" onclick="print()">${ic('printer')} Print Prescription (PDF)</button><button class="btn" onclick="go('guide',${r.id})">Open patient guide</button><button class="btn" onclick="S.modal=null;render()">Close</button></div></div></div>`}
-function render(){document.body.classList.toggle('big',!!S.big);document.body.classList.toggle('hc',!!S.hc);document.body.classList.toggle('mo',!!S.modal);const r=R(S.gid);
-$('#app').innerHTML=`<header><b>${ic('heart-pulse')} MedMitra</b><button class="btn" onclick="go('doctor')">${ic('file-plus')} New prescription</button><button class="btn" onclick="S.drawer=1;render()">${ic('history')} Recent (${S.rx.length})</button></header><main>${S.view=='guide'&&r?guide(r):S.view=='pharm'&&r?pharm(r):doctor()}</main>${S.drawer?`<aside class="drawer"><div class="row"><h2 style="margin:0;margin-right:auto">Recent prescriptions</h2><button class="btn" onclick="S.drawer=0;render()" aria-label="Close">${ic('x')}</button></div>${S.rx.map(x=>`<div class="card"><b>${esc(P(x.pid).name)}</b><div class="mut">${fd(x.issued)}</div><span class="tag">${x.status=='ACTIVE'?'● ':'✓ '}${x.status}</span><div class="row" style="margin-top:8px"><button class="btn" onclick="S.gid=${x.id};S.modal=${x.id};S.drawer=0;render()">Slip</button><button class="btn" onclick="go('guide',${x.id})">Guide</button><button class="btn" onclick="go('pharm',${x.id})">Verify</button></div></div>`).join('')}</aside>`:''}${S.modal&&R(S.modal)?slip(R(S.modal)):''}`;
-window.lucide&&lucide.createIcons();S.err=S.err}
+
+function doctor(){
+  const p=P(S.pid),d=dups(),D=S.doc;
+  return `${errs()}
+  <section class="card">
+    <h2>1. Patient</h2>
+    ${p?`<div class="row"><b style="font-size:1.25em">${esc(p.name)}</b><span class="mut">${esc(p.phone)}</span>${p.allergy?`<span class="bad" style="margin:0;padding:2px 10px">${ic('alert-triangle')} Allergy: ${esc(p.allergy)}</span>`:''}<button class="btn" onclick="S.pid=null;render()">Change</button></div>`:
+    S.add?`<div class="g">
+      <div><label>Name</label><input id="pn"></div>
+      <div><label>Phone (+91)</label><input id="pp" inputmode="tel"></div>
+      <div><label>Date of birth</label><input id="pd" type="date"></div>
+      <div><label>Guide language</label><select id="pl"><option value="en">English</option><option value="hi">हिन्दी</option><option value="kn">ಕನ್ನಡ</option></select></div>
+      <div><label>Caregiver name</label><input id="pcn"></div>
+      <div><label>Caregiver phone</label><input id="pcp"></div>
+      <div><label>Allergies (optional)</label><input id="pa"></div>
+    </div>
+    <label style="margin:10px 0;display:flex;align-items:center;gap:8px"><input type="checkbox" id="pc" style="width:20px;min-height:20px"> Patient agrees to storage of health data and reminders (DPDP Act).</label>
+    <button class="btn p" onclick="addP()">${ic('save')} Save patient</button> <button class="btn" onclick="S.add=0;render()">Cancel</button>`:
+    `<input id="q" placeholder="Search by patient phone or name" oninput="find(this.value)"><div id="res" class="row" style="margin-top:8px"></div><button class="btn" style="margin-top:8px" onclick="S.add=1;render()">${ic('user-plus')} Add new patient</button>`}
+  </section>
+  <section class="card">
+    <h2>2. Prescription Details</h2>
+    <div class="g">
+      <div><label>Doctor Name</label><input value="${esc(D.name)}" oninput="S.doc.name=this.value"></div>
+      <div><label>NMC Registration No.</label><input value="${esc(D.nmc)}" oninput="S.doc.nmc=this.value"></div>
+      <div><label>Hospital / Clinic</label><input value="${esc(D.hosp)}" oninput="S.doc.hosp=this.value"></div>
+      <div><label>Hospital Helpline</label><input value="${esc(D.phone)}" oninput="S.doc.phone=this.value"></div>
+      <div><label>Diagnosis</label><input value="${esc(S.diag)}" oninput="S.diag=this.value"></div>
+      <div><label>Refill Due Date</label><input type="date" value="${S.refill}" onchange="S.refill=this.value"></div>
+      <div><label>Review Date (optional)</label><input type="date" value="${S.review}" onchange="S.review=this.value"></div>
+    </div>
+    <p class="row" style="margin-top:16px"><b>Quick Add:</b>${MEDS.map(m=>`<button class="btn" onclick="chip('${m[0]}','${m[1]}')">+ ${m[0]} ${m[1]}</button>`).join('')}<button class="btn" onclick="S.items.push(blank());render()">+ Other medicine</button></p>
+    ${d.length?`<div class="warn">${ic('copy')} Possible duplicate: ${esc(d.join(', '))}. Doctor/pharmacist to review.</div>`:''}
+    ${S.items.map((m,i)=>`
+      <div class="card" style="border-left:4px solid var(--pri)">
+        <div class="g">
+          <div><label>Generic Name</label><input value="${esc(m.gen)}" oninput="S.items[${i}].gen=this.value"></div>
+          <div><label>Brand (optional)</label><input value="${esc(m.brand)}" oninput="S.items[${i}].brand=this.value"></div>
+          <div><label>Strength</label><input value="${esc(m.strength)}" oninput="S.items[${i}].strength=this.value"></div>
+          <div><label>Dose</label><div class="row" style="flex-wrap:nowrap"><input type="number" step="0.5" value="${m.dose}" oninput="S.items[${i}].dose=this.value"><select onchange="S.items[${i}].unit=this.value"><option>Tablet</option><option>Capsule</option><option>ml</option><option>units</option></select></div></div>
+          <div><label>Frequency</label><select onchange="S.items[${i}].freq=this.value;S.items[${i}].slots=[];render()"><option value="">Choose…</option>${Object.keys(FQ).map(f=>`<option value="${f}" ${m.freq==f?'selected':''}>${T.en[f]}</option>`).join('')}</select></div>
+          <div><label>Food Instruction</label><select onchange="S.items[${i}].food=this.value">${['NOT_SPECIFIED','BEFORE_FOOD','AFTER_FOOD','WITH_FOOD','EMPTY_STOMACH'].map(f=>`<option value="${f}" ${m.food==f?'selected':''}>${T.en[f]||f}</option>`).join('')}</select></div>
+          <div><label>Duration Type</label><select onchange="S.items[${i}].dtype=this.value;render()"><option value="">Choose…</option>${[['FIXED_DAYS','Fixed days'],['UNTIL_REVIEW','Until review'],['LONG_TERM','Long-term'],['NOT_SPECIFIED','Not specified']].map(o=>`<option value="${o[0]}" ${m.dtype==o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div>
+          ${m.dtype=='FIXED_DAYS'?`<div><label>Number of Days</label><input type="number" value="${m.days}" oninput="S.items[${i}].days=this.value"></div>`:''}
+        </div>
+        <label style="margin-top:10px">Time slots ${m.freq?`(select exactly ${FQ[m.freq]})`:'(choose frequency first)'}</label>
+        <div class="row">${SL.map(s=>`<button class="btn ${m.slots.includes(s)?'on':''}" aria-pressed="${m.slots.includes(s)}" onclick="tg(${i},'${s}')">${ic(ICO[s])} ${T.en[s]}</button>`).join('')}</div>
+        <div class="g" style="margin-top:10px">
+          <div><label>Special Instructions (e.g. Complete full course)</label><input value="${esc(m.info)}" oninput="S.items[${i}].info=this.value"></div>
+          <div><label>If missed (optional)</label><input value="${esc(m.miss)}" oninput="S.items[${i}].miss=this.value"></div>
+        </div>
+        ${m.dtype=='NOT_SPECIFIED'?`<label style="margin-top:6px;display:flex;align-items:center;gap:6px"><input type="checkbox" ${m.ok?'checked':''} onchange="S.items[${i}].ok=this.checked" style="width:20px;min-height:20px"> I confirm no duration</label>`:''}
+        <button class="btn" style="margin-top:10px;color:#EF4444;border-color:#EF4444" onclick="S.items.splice(${i},1);render()">${ic('trash-2')} Remove Medicine</button>
+      </div>
+    `).join('')}
+    <button class="btn p" style="margin-top:12px" onclick="submit()">${ic('check')} Save & Generate Prescription</button>
+  </section>`;
+}
+
+function pharm(r){
+  const p=P(r.pid);
+  return `${errs()}
+  <div class="row" style="justify-content:space-between;margin-bottom:12px">
+    <div>
+      <h1 style="margin:0">Pharmacist Verification Portal</h1>
+      <p class="mut" style="margin:4px 0 0">Patient: <b>${esc(p.name)}</b> · Status: <span class="tag">${r.status}</span> · Issued: ${fd(r.issued)}</p>
+    </div>
+    <div class="row">
+      <button class="btn on" onclick="go('guide',${r.id})">${ic('eye')} Preview Routine Guide</button>
+      <button class="btn p" onclick="go('guide',${r.id});setTimeout(()=>window.print(),250)">${ic('printer')} Print Routine Guide</button>
+    </div>
+  </div>
+  ${r.items.map((m,i)=>`
+    <div class="card" style="border-left:4px solid #0284C7">
+      <b style="font-size:1.3em">${esc(m.gen)} ${esc(m.strength)}</b> <span class="tag">${m.dose} ${m.unit}</span>
+      <div class="g" style="margin-top:10px">
+        <div>
+          <label>Dispensed Product (verify packaging)</label>
+          <select onchange="R(${r.id}).items[${i}].pc=this.value;save()">
+            <option value="">Choose matching stock…</option>
+            ${PC.map(c=>`<option value="${c.id}" ${m.pc==c.id?'selected':''}>${c.n} ${c.s}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label>Quantity Dispensed</label>
+          <input type="number" value="${m.qd||m.qty||''}" oninput="R(${r.id}).items[${i}].qd=this.value;save()">
+        </div>
+      </div>
+    </div>
+  `).join('')}
+  <div class="card" style="background:#F0FDF4;border-color:#BBF7D0">
+    <label style="display:flex;align-items:center;gap:10px;font-size:1.05rem;cursor:pointer">
+      <input type="checkbox" id="vf" style="width:24px;min-height:24px">
+      <b>I have verified all medicines and instructions for this patient.</b>
+    </label>
+    <div class="row" style="margin-top:16px">
+      <button class="btn p" onclick="disp(${r.id})">${ic('check-check')} Mark Dispensed</button>
+      <button class="btn on" onclick="go('guide',${r.id})">${ic('file-text')} Preview Routine Guide</button>
+      <button class="btn" onclick="go('guide',${r.id});setTimeout(()=>window.print(),250)">${ic('printer')} Print Routine Guide</button>
+    </div>
+  </div>`;
+}
+
+function slip(r){
+  const p=P(r.pid);
+  return `<div class="modal"><div class="sheet">
+    <div style="border-bottom:3px solid #0284C7;padding-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <h2 style="margin:0">${esc(r.doc.hosp)}</h2>
+        <div class="mut">${esc(r.doc.phone)}</div>
+      </div>
+      <div style="text-align:right">
+        <b>PRESCRIPTION SLIP</b>
+        <div class="mut">Rx #${r.id}</div>
+      </div>
+    </div>
+    <p style="margin:16px 0">
+      <b>Patient:</b> ${esc(p.name)} · ${esc(p.phone)}<br>
+      <b>Date:</b> ${fd(r.issued)} · <b>Diagnosis:</b> ${esc(r.diag)||'–'}
+      ${p.allergy?`<br><b style="color:#DC2626">Allergy:</b> ${esc(p.allergy)}`:''}
+    </p>
+    <table>
+      <thead>
+        <tr style="background:#F1F5F9"><th>Medicine</th><th>Dose</th><th>When</th><th>Food</th><th>Duration</th></tr>
+      </thead>
+      <tbody>
+        ${r.items.map(m=>`<tr>
+          <td><b>${esc(m.gen)}</b> ${esc(m.strength)}</td>
+          <td>${m.dose} ${m.unit}</td>
+          <td>${m.slots.map(s=>T.en[s]).join(', ')}</td>
+          <td>${m.food=='NOT_SPECIFIED'?'–':T.en[m.food]}</td>
+          <td>${durText(m,r,T.en)}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    <p style="margin-top:16px"><b>Refill Due:</b> ${fd(r.refill)} ${r.review?` · <b>Review Date:</b> ${fd(r.review)}`:''}</p>
+    <div style="display:flex;justify-content:space-between;align-items:end;margin-top:36px">
+      <div style="border:2px dashed #94A3B8;width:90px;height:90px;display:grid;place-items:center;font-size:12px;color:#64748B">QR Code</div>
+      <div style="text-align:center">
+        <div style="border-top:2px solid #0F172A;width:220px;padding-top:4px">
+          <b>${esc(r.doc.name)}</b><br><span class="mut" style="font-size:0.85em">${esc(r.doc.nmc)}</span>
+        </div>
+      </div>
+    </div>
+    <div class="row noprint" style="margin-top:24px">
+      <button class="btn p" onclick="window.print()">${ic('printer')} Print Slip</button>
+      <button class="btn on" onclick="go('guide',${r.id})">${ic('file-text')} Open Patient Guide</button>
+      <button class="btn" onclick="S.modal=null;render()">Close</button>
+    </div>
+  </div></div>`;
+}
+
+// ROUTINE GUIDE TABULAR VIEW (Matching the attached user reference image)
+function guideTable(r){
+  const L=T[S.lang]||T.en, p=P(r.pid);
+  const slots=['MORNING','AFTERNOON','EVENING','BEDTIME'];
+
+  // 1-0-1-0 slot helper
+  const getSlotVals=m=>slots.map(s=>m.slots.includes(s)?1:0);
+
+  return `
+  <!-- Screen Navigation Toolbar (Hidden when printing) -->
+  <div class="row noprint" style="justify-content:space-between;margin-bottom:12px">
+    <div class="row">
+      ${['en','hi','kn'].map(l=>`<button class="btn ${S.lang==l?'on':''}" onclick="S.lang='${l}';render()">${{en:'English',hi:'हिन्दी',kn:'ಕನ್ನಡ'}[l]}</button>`).join('')}
+      <button class="btn ${S.big?'on':''}" onclick="S.big^=1;render()">${ic('a-large-small')} ${S.big?'Normal font':'Large font'}</button>
+    </div>
+    <div class="row">
+      <button class="btn p" onclick="window.print()">${ic('printer')} Print Routine Guide</button>
+      <button class="btn" onclick="go('pharm',${r.id})">${ic('pill')} Pharmacy Portal</button>
+      <button class="btn" onclick="go('doctor')">${ic('file-plus')} New Prescription</button>
+    </div>
+  </div>
+
+  <!-- Printable Routine Document Container -->
+  <div class="routine-doc">
+    <!-- Top Header -->
+    <div class="guide-header">
+      <div class="brand-title-wrap">
+        <div class="brand-logo">
+          <div class="brand-logo-icon">${ic('heart-pulse')}</div>
+          <div class="brand-text">
+            <b>MedMitra</b>
+            <span>Right Medicine • Right Time • Better Health</span>
+          </div>
+        </div>
+        <div class="guide-divider"></div>
+        <div class="guide-main-title">
+          <h1>${L.title}</h1>
+          <p>${L.sub}</p>
+        </div>
+      </div>
+      <div class="guide-dear-patient">
+        <b>Dear Patient,</b><br>
+        This guide shows you what medicines to take, when to take them, and for how long. Please keep it safe and refer to it daily.
+      </div>
+    </div>
+
+    <!-- Patient Details Banner -->
+    <div class="patient-info-banner">
+      <div class="pib-item">
+        <div class="pib-icon">${ic('user')}</div>
+        <div>
+          <div class="pib-label">${L.patient}</div>
+          <div class="pib-val">${esc(p.name)}</div>
+        </div>
+      </div>
+      <div class="pib-item">
+        <div class="pib-icon">${ic('calendar')}</div>
+        <div>
+          <div class="pib-label">${L.age}</div>
+          <div class="pib-val">${calcAge(p.dob)}</div>
+        </div>
+      </div>
+      <div class="pib-item">
+        <div class="pib-icon">${ic('calendar-clock')}</div>
+        <div>
+          <div class="pib-label">${L.issued}</div>
+          <div class="pib-val">${fd(r.issued)}</div>
+        </div>
+      </div>
+      <div class="pib-item">
+        <div class="pib-icon">${ic('building-2')}</div>
+        <div>
+          <div class="pib-label">${L.pharmacy}</div>
+          <div class="pib-val">${esc(r.doc.hosp || 'MedMitra Central Pharmacy')}</div>
+        </div>
+      </div>
+    </div>
+
+    ${p.allergy?`<div class="bad" style="margin-bottom:14px">${ic('alert-triangle')} ${L.allergy}: <b>${esc(p.allergy)}</b></div>`:''}
+
+    <!-- Medication Routine Table -->
+    <div class="table-responsive">
+      <table class="guide-table">
+        <thead>
+          <tr>
+            <th style="width:40px">#</th>
+            <th style="min-width:210px">Medicine & Image</th>
+            <th style="min-width:75px">Dose</th>
+            <th style="min-width:195px">How Many Times a Day<br><span style="font-weight:500;font-size:0.8em;text-transform:none">(1-0-1-0)</span></th>
+            <th style="min-width:120px">Food Instruction</th>
+            <th style="min-width:130px">Duration</th>
+            <th style="min-width:140px">Special Instructions</th>
+            <th style="min-width:90px">Manual Checklist<br><span style="font-weight:500;font-size:0.75em;text-transform:none">(Check with pen)</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${r.items.map((m, idx)=>{
+            const vals=getSlotVals(m);
+            return `
+            <tr>
+              <td>
+                <span class="step-badge">${idx+1}</span>
+              </td>
+              <td>
+                <div class="med-cell">
+                  <div class="med-mini-img">
+                    ${packMiniSvg(m.gen, m.strength)}
+                  </div>
+                  <div class="med-name-col">
+                    <b>${esc(m.gen)}</b>
+                    <span>${esc(m.strength)} ${esc(m.unit||'Tablet')}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <b>${m.unit && m.unit.toLowerCase() !== 'tablet' ? `${m.dose} ${esc(m.unit)}` : m.dose}</b>
+              </td>
+              <td>
+                <div class="slot-grid">
+                  <div class="slot-col">
+                    <span class="slot-icon" title="Morning">${ic('sunrise')}</span>
+                    <span class="slot-val ${vals[0]?'on':'off'}">${vals[0]}</span>
+                  </div>
+                  <div class="slot-col">
+                    <span class="slot-icon" title="Afternoon">${ic('sun')}</span>
+                    <span class="slot-val ${vals[1]?'on':'off'}">${vals[1]}</span>
+                  </div>
+                  <div class="slot-col">
+                    <span class="slot-icon" title="Evening">${ic('sunset')}</span>
+                    <span class="slot-val ${vals[2]?'on':'off'}">${vals[2]}</span>
+                  </div>
+                  <div class="slot-col">
+                    <span class="slot-icon moon" title="Night">${ic('moon')}</span>
+                    <span class="slot-val ${vals[3]?'on':'off'}">${vals[3]}</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+                  <span style="color:#0284C7">${ic('utensils')}</span>
+                  <b>${m.food=='NOT_SPECIFIED'?'–':(L[m.food]||m.food)}</b>
+                </div>
+              </td>
+              <td>
+                <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+                  <span style="color:#0284C7">${ic('calendar')}</span>
+                  <div>${durText(m,r,L)}</div>
+                </div>
+              </td>
+              <td>
+                <div style="font-size:0.92rem;line-height:1.3;text-align:left;padding:0 4px">
+                  ${m.info?`<div style="display:flex;gap:4px;align-items:flex-start"><span style="color:#0284C7;flex-shrink:0">${ic('info')}</span><span>${esc(m.info)}</span></div>`:''}
+                  ${m.miss?`<div style="font-size:0.85em;color:#64748B;margin-top:2px">Missed: ${esc(m.miss)}</div>`:''}
+                  ${!m.info&&!m.miss?'<span style="color:#94A3B8">–</span>':''}
+                </div>
+              </td>
+              <!-- Manual checklist empty space for humans to write and check with pen -->
+              <td>
+                <div class="manual-box-wrap">
+                  <div class="manual-check-box" title="Empty space for manual verification with pen"></div>
+                  <span class="manual-box-lbl">Tick / Date</span>
+                </div>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Supportive Info Cards matching bottom of design -->
+    <div class="guide-bottom-grid">
+      <!-- Medicine Timing Guide -->
+      <div class="g-card">
+        <h3><span style="color:#0284C7">${ic('clock')}</span> Medicine Timing Guide</h3>
+        <div class="timing-list">
+          <div class="timing-row">
+            <span class="timing-key" style="color:#D97706">${ic('sunrise')} Morning</span>
+            <span class="timing-val">6:00 AM – 10:00 AM</span>
+          </div>
+          <div class="timing-row">
+            <span class="timing-key" style="color:#D97706">${ic('sun')} Afternoon</span>
+            <span class="timing-val">11:00 AM – 3:00 PM</span>
+          </div>
+          <div class="timing-row">
+            <span class="timing-key" style="color:#D97706">${ic('sunset')} Evening</span>
+            <span class="timing-val">4:00 PM – 9:00 PM</span>
+          </div>
+          <div class="timing-row">
+            <span class="timing-key" style="color:#4338CA">${ic('moon')} Night</span>
+            <span class="timing-val">9:00 PM – 12:00 AM</span>
+          </div>
+        </div>
+        <div class="format-pill">
+          1 - 0 - 1 - 0 &nbsp;=&nbsp; Morning - Afternoon - Evening - Night
+        </div>
+      </div>
+
+      <!-- Refill Reminder -->
+      <div class="g-card">
+        <h3><span style="color:#16A34A">${ic('calendar-check')}</span> Refill Reminder</h3>
+        <p style="margin:4px 0">Your next refill is due around:</p>
+        <div class="refill-badge">${fd(r.refill)}</div>
+        <p style="margin:4px 0;font-size:0.85rem;color:#475569">
+          Please contact the pharmacy 3 days before this date to avoid running out of essential medicine.
+        </p>
+      </div>
+
+      <!-- Important Notes -->
+      <div class="g-card">
+        <h3><span style="color:#DC2626">${ic('alert-circle')}</span> Important Notes</h3>
+        <ul class="notes-list">
+          <li>Do not stop any medicine without consulting your doctor.</li>
+          <li>If you miss a dose, take it as soon as you remember unless close to next dose.</li>
+          <li>Do not double the dose to make up for a missed one.</li>
+          <li>Keep this guide safe and refer to it daily.</li>
+        </ul>
+      </div>
+
+      <!-- Need Help -->
+      <div class="g-card">
+        <h3><span style="color:#0284C7">${ic('phone-call')}</span> Need Help?</h3>
+        <div style="font-size:0.92rem;line-height:1.45;color:#334155">
+          <div><b>Pharmacy Helpline:</b></div>
+          <div style="font-size:1.15rem;font-weight:700;color:#0284C7;margin:2px 0 6px">1800 123 4567</div>
+          <div><b>Consultant Doctor:</b></div>
+          <div style="font-weight:600">${esc(r.doc.name)}</div>
+          <div class="mut" style="font-size:0.85rem">${esc(r.doc.phone)}</div>
+          <div style="margin-top:8px;font-style:italic;color:#0D9488;font-weight:600">Take care! ♡</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-footer-note">
+      <b>MedMitra</b> — Your Health, Our Priority
+    </div>
+  </div>`;
+}
+
+function render(){
+  document.body.classList.toggle('big',!!S.big);
+  document.body.classList.toggle('hc',!!S.hc);
+  document.body.classList.toggle('mo',!!S.modal);
+
+  const r=R(S.gid);
+  $('#app').innerHTML=`
+    <header>
+      <b>${ic('heart-pulse')} MedMitra</b>
+      <button class="btn" onclick="go('doctor')">${ic('file-plus')} Doctor Portal</button>
+      <button class="btn" onclick="S.drawer=1;render()">${ic('history')} Prescriptions (${S.rx.length})</button>
+    </header>
+    <main>
+      ${S.view=='guide'&&r?guideTable(r):S.view=='pharm'&&r?pharm(r):doctor()}
+    </main>
+    ${S.drawer?`
+      <aside class="drawer">
+        <div class="row" style="justify-content:space-between;margin-bottom:14px">
+          <h2 style="margin:0">Recent Prescriptions</h2>
+          <button class="btn" onclick="S.drawer=0;render()" aria-label="Close">${ic('x')}</button>
+        </div>
+        ${S.rx.map(x=>`
+          <div class="card" style="margin-bottom:12px">
+            <b style="font-size:1.15em">${esc(P(x.pid).name)}</b>
+            <div class="mut" style="font-size:0.85em;margin:2px 0">${fd(x.issued)}</div>
+            <span class="tag">${x.status=='ACTIVE'?'● ':'✓ '}${x.status}</span>
+            <div class="row" style="margin-top:10px">
+              <button class="btn" onclick="S.gid=${x.id};S.modal=${x.id};S.drawer=0;render()">Slip</button>
+              <button class="btn on" onclick="go('guide',${x.id})">Guide</button>
+              <button class="btn" onclick="go('pharm',${x.id})">Verify</button>
+            </div>
+          </div>
+        `).join('')}
+      </aside>`:''}
+    ${S.modal&&R(S.modal)?slip(R(S.modal)):''}
+  `;
+  window.lucide&&lucide.createIcons();
+  S.err=[];
+}
+
 render();
 </script></body></html>

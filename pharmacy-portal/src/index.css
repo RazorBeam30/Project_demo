@@ -17,19 +17,87 @@
 }
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 6mm 8mm;
+  }
+  
+  html, body {
+    overflow: visible !important;
+    height: auto !important;
+    width: 100% !important;
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   body > *:not(.guide-portal) {
     display: none !important;
   }
+
   .guide-portal {
     position: static !important;
     overflow: visible !important;
     height: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
+
   .no-print {
     display: none !important;
   }
-  * {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+
+  /* Completely strip any scrollbars and prevent overflow clipping */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    overflow: visible !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    box-sizing: border-box !important;
+  }
+
+  *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  /* Table print optimization */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    table-layout: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  th, td {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    word-break: normal !important;
+  }
+
+  /* Elderly high-legibility print overrides */
+  table th {
+    font-size: 10pt !important;
+    font-weight: 900 !important;
+    background: #0F3B66 !important;
+    color: #ffffff !important;
+    padding: 8px 4px !important;
+  }
+
+  table td {
+    border: 1.5px solid #64748B !important;
+    padding: 8px 4px !important;
   }
 }

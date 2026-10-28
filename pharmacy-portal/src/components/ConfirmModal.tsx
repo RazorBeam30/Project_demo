@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from 'react'
-import { AlertTriangle, CheckCircle2, Loader2, Pill, Printer, X } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Loader2, Pill, Printer, ShieldAlert, X } from 'lucide-react'
 import { dispensePrescription } from '../lib/api'
 import { formatDate, formatDateTime } from '../lib/dates'
 import { describeDuration } from '../lib/labels'
@@ -144,9 +144,16 @@ export default function ConfirmModal({
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
-                    <p className="text-2xl font-extrabold text-slate-900">
-                      {it.medicine_name} {it.strength}
-                    </p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="text-2xl font-extrabold text-slate-900">
+                        {it.medicine_name} {it.strength}
+                      </p>
+                      {it.is_controlled && (
+                        <span className="inline-flex items-center gap-1 rounded-md border border-red-700 bg-red-100 px-2 py-0.5 text-sm font-bold text-red-950">
+                          <ShieldAlert className="h-4 w-4 text-red-700" aria-hidden="true" /> Controlled medicine
+                        </span>
+                      )}
+                    </div>
                     <p className="text-lg text-slate-800">
                       {it.dose} · {it.frequency_label}
                     </p>
@@ -158,6 +165,15 @@ export default function ConfirmModal({
                 </li>
               ))}
             </ul>
+
+            {prescription.items.some((i) => i.is_controlled) && (
+              <p className="mt-4 flex items-start gap-2 rounded-lg border-2 border-amber-600 bg-amber-50 p-3 text-lg font-semibold text-amber-950">
+                <ShieldAlert className="mt-0.5 h-6 w-6 shrink-0 text-amber-700" aria-hidden="true" />
+                <span>
+                  <strong>Controlled Medicine:</strong> This prescription includes controlled drugs. Record the dispensing in your controlled drugs register according to regulation.
+                </span>
+              </p>
+            )}
 
             {missingDuration.length > 0 && (
               <p className="mt-4 flex items-start gap-2 rounded-lg border-2 border-amber-600 bg-amber-100 p-3 text-lg font-semibold text-amber-950">
