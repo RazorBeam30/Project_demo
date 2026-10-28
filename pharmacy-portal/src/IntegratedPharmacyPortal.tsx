@@ -567,7 +567,7 @@ export default function IntegratedPharmacyPortal() {
 
         {/* Patient Switcher */}
         <div className="flex items-center gap-2">
-          <span className="text-xs font-black uppercase text-slate-500">Demo Patient:</span>
+          <span className="text-xs font-black uppercase text-slate-500">Select Patient:</span>
           <select
             value={selectedPatient?.id}
             onChange={(e) => setSelectedPatient(DEMO_PATIENTS.find((p) => p.id === e.target.value) || null)}
