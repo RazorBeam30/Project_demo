@@ -20,7 +20,9 @@ insert into public.prescriptions (id, patient_id, prescriber_name, issued_on, re
   ('aaaaaaa1-0000-0000-0000-000000000003', '22222222-2222-2222-2222-222222222222', 'Dr. Demo Rao', current_date - 14, current_date - 3, 'ACTIVE'),
   -- Contains a controlled medicine: blocked on this screen
   ('aaaaaaa1-0000-0000-0000-000000000004', '33333333-3333-3333-3333-333333333333', 'Dr. Demo Nair', current_date - 1, current_date + 5, 'ACTIVE'),
-  ('aaaaaaa1-0000-0000-0000-000000000005', '44444444-4444-4444-4444-444444444444', 'Dr. Rajesh Singhania', current_date - 3, current_date + 12, 'ACTIVE')
+  ('aaaaaaa1-0000-0000-0000-000000000005', '44444444-4444-4444-4444-444444444444', 'Dr. Rajesh Singhania', current_date - 3, current_date + 12, 'ACTIVE'),
+  ('aaaaaaa1-0000-0000-0000-000000000006', '44444444-4444-4444-4444-444444444444', 'Dr. Ananya Sen',       current_date - 1, current_date + 6,  'ACTIVE'),
+  ('aaaaaaa1-0000-0000-0000-000000000007', '44444444-4444-4444-4444-444444444444', 'Dr. Vikram Mehta',     current_date - 10, current_date - 1, 'ACTIVE')
 on conflict (id) do nothing;
 
 insert into public.prescription_items
