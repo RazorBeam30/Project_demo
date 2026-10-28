@@ -8,111 +8,854 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-            display: ['"Plus Jakarta Sans"', 'Inter', 'ui-sans-serif', 'sans-serif'],
-          },
-        },
-      },
-    };
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-    @keyframes pop { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f0f4f3;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    /* ========== Molecular background pattern ========== */
+    .bg-pattern {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      z-index: 0;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    /* ========== Main container ========== */
+    .page-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-card {
+      display: flex;
+      width: 100%;
+      max-width: 960px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+      overflow: hidden;
+      min-height: 540px;
+    }
+
+    /* ========== Left panel ========== */
+    .left-panel {
+      flex: 1;
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      background: linear-gradient(135deg, #fafffe 0%, #f5faf9 100%);
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 400;
+      color: #c0c8c6;
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      display: block;
+      font-weight: 700;
+      color: #38b2a0;
+      font-size: 2.8rem;
+    }
+
+    .brand-desc {
+      margin-top: 1rem;
+      font-size: 0.88rem;
+      color: #999;
+      line-height: 1.7;
+      max-width: 340px;
+    }
+
+    .illustration-wrapper {
+      margin-top: 1.5rem;
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .illustration-bg {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,178,160,0.08) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .illustration-wrapper svg {
+      position: relative;
+      z-index: 1;
+      max-width: 320px;
+      height: auto;
+    }
+
+    /* ========== Right panel ========== */
+    .right-panel {
+      flex: 1;
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-heading {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #555;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .form-subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #999;
+      margin-top: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ========== Role selector ========== */
+    .role-selector {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      justify-content: center;
+    }
+
+    .role-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.2rem;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      background: #fff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .role-btn:hover {
+      border-color: #38b2a0;
+      color: #38b2a0;
+    }
+
+    .role-btn.active {
+      border-color: #38b2a0;
+      background: #eef9f7;
+      color: #38b2a0;
+    }
+
+    .role-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ========== Form inputs ========== */
+    .form-group {
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: none;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    #auth-area .form-group input {
+      width: 100%;
+      border: none;
+      border-bottom: 1.5px solid #ddd;
+      padding: 0.75rem 0.25rem;
+      font-size: 0.9rem;
+      color: #333;
+      background: transparent;
+      outline: none;
+      transition: border-color 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    #auth-area .form-group input.has-toggle {
+      padding-right: 2.5rem;
+    }
+
+    #auth-area .form-group input::placeholder {
+      color: #bbb;
+      font-size: 0.85rem;
+    }
+
+    #auth-area .form-group input:focus {
+      border-bottom-color: #38b2a0;
+    }
+
+    #auth-area .form-group input[aria-invalid="true"] {
+      border-bottom-color: #e74c3c;
+    }
+
+    .form-group .error-text {
+      font-size: 0.72rem;
+      color: #e74c3c;
+      margin-top: 0.3rem;
+      display: none;
+    }
+
+    .form-group .error-text.visible {
+      display: block;
+    }
+
+    .input-wrap .pw-toggle {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #bbb;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .input-wrap .pw-toggle:hover { color: #666; }
+
+    /* ========== Options row ========== */
+    .options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: #999;
+      cursor: pointer;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      accent-color: #38b2a0;
+      cursor: pointer;
+    }
+
+    .forgot-link {
+      font-size: 0.8rem;
+      color: #999;
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      transition: color 0.2s;
+    }
+
+    .forgot-link:hover {
+      color: #38b2a0;
+    }
+
+    /* ========== Buttons ========== */
+    .btn-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-login {
+      flex: 1;
+      padding: 0.85rem 1.5rem;
+      border: none;
+      border-radius: 25px;
+      background: #38b2a0;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .btn-login:hover {
+      background: #2d9a89;
+      box-shadow: 0 4px 15px rgba(56,178,160,0.35);
+    }
+
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-signup {
+      flex: 1;
+      padding: 0.85rem 1.5rem;
+      border: 2px solid #38b2a0;
+      border-radius: 25px;
+      background: transparent;
+      color: #38b2a0;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .btn-signup:hover {
+      background: #eef9f7;
+    }
+
+    /* ========== Contact link ========== */
+    .contact-link {
+      text-align: center;
+    }
+
+    .contact-link a {
+      font-size: 0.82rem;
+      color: #666;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+
+    .contact-link a:hover {
+      color: #38b2a0;
+    }
+
+    /* ========== Status message ========== */
+    .status-msg {
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      margin-bottom: 1rem;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-msg.visible { display: flex; }
+    .status-msg.success { background: #eef9f7; color: #1a7a6a; border: 1px solid #c2e9e0; }
+    .status-msg.error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+    /* ========== Bottom green bar ========== */
+    .bottom-bar {
+      height: 6px;
+      background: linear-gradient(90deg, #38b2a0 0%, #4ecdc4 40%, #56d4c8 60%, #38b2a0 100%);
+      border-radius: 3px 3px 0 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ========== Sign-up expanded form ========== */
+    .signup-form .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-scroll {
+      max-height: 340px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .form-scroll::-webkit-scrollbar { width: 4px; }
+    .form-scroll::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+    .back-to-login {
+      text-align: center;
+      margin-top: 0.75rem;
+    }
+
+    .back-to-login button {
+      font-size: 0.82rem;
+      color: #38b2a0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .back-to-login button:hover { color: #2d9a89; }
+
+    /* ========== Modal ========== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-panel {
+      position: relative;
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      z-index: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #999;
+      padding: 4px;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover { background: #f1f1f1; }
+
+    .modal-head {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-head .modal-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: #eef9f7;
+      color: #38b2a0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .modal-head h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #333;
+    }
+
+    .modal-head p {
+      font-size: 0.82rem;
+      color: #999;
+      margin-top: 0.4rem;
+    }
+
+    .modal-form .form-group input {
+      width: 100%;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      color: #333;
+      background: #fafafa;
+      outline: none;
+      transition: border-color 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .modal-form .form-group input.has-toggle {
+      padding-right: 2.5rem;
+    }
+
+    .modal-form .form-group input::placeholder {
+      color: #bbb;
+      font-size: 0.85rem;
+    }
+
+    .modal-form .form-group input:focus {
+      border-color: #38b2a0;
+      background: #fff;
+    }
+
+    .modal-form .form-group input[aria-invalid="true"] {
+      border-color: #e74c3c;
+    }
+
+    .modal-btn-primary {
+      width: 100%;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 10px;
+      background: #38b2a0;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .modal-btn-primary:hover { background: #2d9a89; }
+    .modal-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .modal-btn-secondary {
+      width: 100%;
+      padding: 0.65rem;
+      border: none;
+      background: none;
+      color: #999;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      font-family: inherit;
+    }
+
+    .modal-btn-secondary:hover { color: #666; }
+
+    .otp-boxes {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .otp-boxes input {
+      width: 44px;
+      height: 52px;
+      border: 1.5px solid #ddd !important;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #333;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: 'Inter', sans-serif;
+      background: #fafafa;
+      padding: 0;
+    }
+
+    .otp-boxes input:focus {
+      border-color: #38b2a0 !important;
+      background: #fff;
+    }
+
+    .otp-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .otp-footer button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .otp-footer .change-num { color: #888; }
+    .otp-footer .change-num:hover { color: #555; }
+    .otp-footer .resend-btn { color: #38b2a0; }
+    .otp-footer .resend-btn:disabled { color: #ccc; cursor: not-allowed; }
+
+    /* ========== Animations ========== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: none; }
+    }
+
     @keyframes spin { to { transform: rotate(360deg); } }
-    .anim-fade-up { animation: fadeUp .35s ease both; }
-    .anim-pop { animation: pop .2s ease both; }
-    .spinner { animation: spin .7s linear infinite; }
+
+    .anim-fade { animation: fadeIn 0.3s ease both; }
+    .anim-pop { animation: popIn 0.2s ease both; }
+    .spinner { animation: spin 0.7s linear infinite; }
+
+    /* ========== Responsive ========== */
+    @media (max-width: 768px) {
+      .auth-card {
+        flex-direction: column;
+        max-width: 440px;
+      }
+
+      .left-panel {
+        padding: 2rem 1.5rem 1.5rem;
+        text-align: center;
+      }
+
+      .brand-desc { margin-left: auto; margin-right: auto; }
+
+      .illustration-wrapper svg { max-width: 240px; }
+
+      .right-panel {
+        padding: 1.5rem 1.5rem 2rem;
+      }
+
+      .brand-title, .brand-title span { font-size: 2rem; }
+    }
+
+    @media (max-width: 480px) {
+      .left-panel { display: none; }
+      .auth-card { border-radius: 0; min-height: 100vh; }
+      .page-wrapper { padding: 0; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      .anim-fade-up, .anim-pop, .spinner { animation: none !important; }
+      .anim-fade, .anim-pop, .spinner { animation: none !important; }
       * { transition: none !important; }
     }
   </style>
 </head>
 
-<body class="min-h-screen font-sans text-slate-800 antialiased bg-gradient-to-br from-sky-50 via-white to-teal-50 relative overflow-x-hidden">
+<body>
 
-  <!-- Decorative background -->
-  <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-0">
-    <div class="absolute -top-32 -left-24 h-96 w-96 rounded-full bg-teal-200/40 blur-3xl"></div>
-    <div class="absolute top-1/3 -right-24 h-96 w-96 rounded-full bg-sky-200/50 blur-3xl"></div>
-    <div class="absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-cyan-100/60 blur-3xl"></div>
+  <!-- Molecular pattern background -->
+  <svg class="bg-pattern" viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#38b2a0" stroke-width="0.8" fill="none">
+      <circle cx="100" cy="120" r="4" fill="#38b2a0" opacity="0.3"/>
+      <circle cx="250" cy="80" r="3" fill="#38b2a0" opacity="0.25"/>
+      <circle cx="400" cy="150" r="5" fill="#38b2a0" opacity="0.2"/>
+      <circle cx="550" cy="60" r="3.5" fill="#38b2a0" opacity="0.3"/>
+      <circle cx="700" cy="130" r="4" fill="#38b2a0" opacity="0.25"/>
+      <circle cx="850" cy="90" r="3" fill="#38b2a0" opacity="0.2"/>
+      <circle cx="1000" cy="160" r="5" fill="#38b2a0" opacity="0.3"/>
+      <circle cx="1150" cy="70" r="3.5" fill="#38b2a0" opacity="0.25"/>
+      <circle cx="1300" cy="110" r="4" fill="#38b2a0" opacity="0.2"/>
+      <line x1="100" y1="120" x2="250" y2="80" opacity="0.15"/>
+      <line x1="250" y1="80" x2="400" y2="150" opacity="0.12"/>
+      <line x1="400" y1="150" x2="550" y2="60" opacity="0.15"/>
+      <line x1="550" y1="60" x2="700" y2="130" opacity="0.12"/>
+      <line x1="700" y1="130" x2="850" y2="90" opacity="0.15"/>
+      <line x1="850" y1="90" x2="1000" y2="160" opacity="0.12"/>
+      <line x1="1000" y1="160" x2="1150" y2="70" opacity="0.15"/>
+      <line x1="1150" y1="70" x2="1300" y2="110" opacity="0.12"/>
+      <line x1="100" y1="120" x2="400" y2="150" opacity="0.08"/>
+      <line x1="250" y1="80" x2="550" y2="60" opacity="0.08"/>
+      <line x1="700" y1="130" x2="1000" y2="160" opacity="0.08"/>
+      <line x1="850" y1="90" x2="1150" y2="70" opacity="0.08"/>
+      <circle cx="175" cy="170" r="2.5" fill="#38b2a0" opacity="0.15"/>
+      <circle cx="325" cy="40" r="2" fill="#38b2a0" opacity="0.15"/>
+      <circle cx="625" cy="170" r="2.5" fill="#38b2a0" opacity="0.12"/>
+      <circle cx="775" cy="50" r="2" fill="#38b2a0" opacity="0.15"/>
+      <circle cx="925" cy="40" r="2.5" fill="#38b2a0" opacity="0.12"/>
+      <circle cx="1075" cy="170" r="2" fill="#38b2a0" opacity="0.15"/>
+      <line x1="175" y1="170" x2="250" y2="80" opacity="0.08"/>
+      <line x1="325" y1="40" x2="400" y2="150" opacity="0.06"/>
+      <line x1="625" y1="170" x2="700" y2="130" opacity="0.08"/>
+      <line x1="775" y1="50" x2="850" y2="90" opacity="0.06"/>
+      <line x1="925" y1="40" x2="1000" y2="160" opacity="0.08"/>
+      <line x1="1075" y1="170" x2="1150" y2="70" opacity="0.06"/>
+    </g>
+  </svg>
+
+  <div class="page-wrapper">
+    <div class="auth-card">
+
+      <!-- Left panel: Branding + Illustration -->
+      <div class="left-panel">
+        <h1 class="brand-title">
+          Medmitra
+          <span>Healthcare</span>
+        </h1>
+        <p class="brand-desc">
+          Medmitra connects doctors, pharmacists, and patients—verified professionals, clearer prescriptions, and a smoother path from consultation to medicine.
+        </p>
+        <div class="illustration-wrapper">
+          <div class="illustration-bg"></div>
+          <!-- Medical team illustration -->
+          <svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+            <!-- Person 1 - Male nurse (left) -->
+            <g transform="translate(60,40)">
+              <!-- Body -->
+              <rect x="15" y="120" width="50" height="80" rx="6" fill="#5ba4cf"/>
+              <rect x="15" y="190" width="22" height="90" rx="4" fill="#3b7fb5"/>
+              <rect x="43" y="190" width="22" height="90" rx="4" fill="#3b7fb5"/>
+              <!-- Neck -->
+              <rect x="30" y="105" width="20" height="20" rx="4" fill="#f5c6a0"/>
+              <!-- Head -->
+              <circle cx="40" cy="85" r="28" fill="#f5c6a0"/>
+              <!-- Hair -->
+              <path d="M12 80 Q12 52 40 48 Q68 52 68 80 Q68 65 40 62 Q12 65 12 80Z" fill="#5a3825"/>
+              <!-- Stethoscope -->
+              <path d="M22 140 Q10 170 25 185" stroke="#444" stroke-width="2.5" fill="none"/>
+              <circle cx="25" cy="187" r="4" fill="#666"/>
+              <!-- Eyes & mouth -->
+              <circle cx="32" cy="82" r="2.5" fill="#333"/>
+              <circle cx="48" cy="82" r="2.5" fill="#333"/>
+              <path d="M33 95 Q40 100 47 95" stroke="#c97" stroke-width="1.5" fill="none"/>
+            </g>
+
+            <!-- Person 2 - Doctor with glasses -->
+            <g transform="translate(150,20)">
+              <!-- Legs -->
+              <rect x="18" y="210" width="22" height="90" rx="4" fill="#d4c5a0"/>
+              <rect x="46" y="210" width="22" height="90" rx="4" fill="#c4b590"/>
+              <!-- Body - white coat -->
+              <rect x="10" y="130" width="65" height="90" rx="6" fill="#fff" stroke="#ddd" stroke-width="1"/>
+              <!-- Shirt underneath -->
+              <rect x="28" y="130" width="30" height="25" rx="3" fill="#4ecdc4"/>
+              <!-- Neck -->
+              <rect x="32" y="112" width="20" height="22" rx="4" fill="#f5c6a0"/>
+              <!-- Head -->
+              <circle cx="42" cy="90" r="30" fill="#f5c6a0"/>
+              <!-- Hair -->
+              <path d="M12 82 Q12 52 42 46 Q72 52 72 82 Q72 62 42 58 Q12 62 12 82Z" fill="#c8a055"/>
+              <!-- Glasses -->
+              <rect x="24" y="82" width="14" height="12" rx="3" fill="none" stroke="#555" stroke-width="1.8"/>
+              <rect x="44" y="82" width="14" height="12" rx="3" fill="none" stroke="#555" stroke-width="1.8"/>
+              <line x1="38" y1="88" x2="44" y2="88" stroke="#555" stroke-width="1.5"/>
+              <!-- Eyes -->
+              <circle cx="31" cy="88" r="2" fill="#333"/>
+              <circle cx="51" cy="88" r="2" fill="#333"/>
+              <!-- Mouth -->
+              <path d="M35 103 Q42 107 49 103" stroke="#c97" stroke-width="1.5" fill="none"/>
+              <!-- Clipboard -->
+              <rect x="60" y="155" width="25" height="35" rx="3" fill="#b08050"/>
+              <rect x="63" y="160" width="19" height="26" rx="2" fill="#fff"/>
+              <line x1="66" y1="166" x2="79" y2="166" stroke="#ddd" stroke-width="1"/>
+              <line x1="66" y1="171" x2="79" y2="171" stroke="#ddd" stroke-width="1"/>
+              <line x1="66" y1="176" x2="75" y2="176" stroke="#ddd" stroke-width="1"/>
+            </g>
+
+            <!-- Person 3 - Female doctor (center) -->
+            <g transform="translate(250,10)">
+              <!-- Legs -->
+              <rect x="22" y="225" width="18" height="85" rx="3" fill="#f5c6a0"/>
+              <rect x="45" y="225" width="18" height="85" rx="3" fill="#f5c6a0"/>
+              <!-- Skirt -->
+              <path d="M15 195 L18 240 L67 240 L70 195Z" fill="#2a2a2a"/>
+              <!-- Body - white coat -->
+              <rect x="12" y="125" width="60" height="78" rx="6" fill="#fff" stroke="#ddd" stroke-width="1"/>
+              <!-- Shirt -->
+              <rect x="28" y="125" width="28" height="20" rx="3" fill="#4ecdc4"/>
+              <!-- Stethoscope -->
+              <path d="M30 145 Q20 175 35 195" stroke="#444" stroke-width="2.5" fill="none"/>
+              <circle cx="35" cy="197" r="4" fill="#666"/>
+              <!-- Neck -->
+              <rect x="33" y="108" width="18" height="22" rx="4" fill="#f5c6a0"/>
+              <!-- Head -->
+              <circle cx="42" cy="85" r="30" fill="#f5c6a0"/>
+              <!-- Hair -->
+              <path d="M12 90 Q8 50 42 42 Q76 50 72 90" fill="#3a2515"/>
+              <path d="M12 90 Q8 100 15 130" stroke="#3a2515" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path d="M72 90 Q76 100 69 130" stroke="#3a2515" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <!-- Eyes -->
+              <circle cx="33" cy="85" r="2.5" fill="#333"/>
+              <circle cx="51" cy="85" r="2.5" fill="#333"/>
+              <!-- Smile -->
+              <path d="M35 98 Q42 105 49 98" stroke="#c97" stroke-width="1.8" fill="none"/>
+            </g>
+
+            <!-- Person 4 - Female nurse -->
+            <g transform="translate(355,30)">
+              <!-- Body -->
+              <rect x="15" y="125" width="50" height="80" rx="6" fill="#8ba8d4"/>
+              <rect x="15" y="195" width="22" height="90" rx="4" fill="#7090b8"/>
+              <rect x="43" y="195" width="22" height="90" rx="4" fill="#7090b8"/>
+              <!-- Neck -->
+              <rect x="30" y="108" width="18" height="20" rx="4" fill="#f5c6a0"/>
+              <!-- Head -->
+              <circle cx="40" cy="88" r="27" fill="#f5c6a0"/>
+              <!-- Hair -->
+              <path d="M13 85 Q10 55 40 48 Q70 55 67 85" fill="#3a2515"/>
+              <path d="M67 85 Q70 95 65 120" stroke="#3a2515" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <!-- Eyes -->
+              <circle cx="32" cy="85" r="2.2" fill="#333"/>
+              <circle cx="48" cy="85" r="2.2" fill="#333"/>
+              <!-- Mouth -->
+              <path d="M33 97 Q40 102 47 97" stroke="#c97" stroke-width="1.5" fill="none"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Right panel: Auth form -->
+      <div class="right-panel">
+        <h2 class="form-heading">Medmitra</h2>
+        <p class="form-subtitle" id="form-subtitle">Welcome back! Please login to your account.</p>
+
+        <!-- Role selector -->
+        <div class="role-selector" id="role-group">
+          <button type="button" class="role-btn" data-role="doctor">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2v2"/><path d="M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/></svg>
+            Doctor
+          </button>
+          <button type="button" class="role-btn" data-role="pharmacist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+            Pharmacist
+          </button>
+        </div>
+
+        <!-- Status message -->
+        <div class="status-msg" id="status-msg" role="status" aria-live="polite"></div>
+
+        <!-- Dynamic auth area -->
+        <div id="auth-area"></div>
+      </div>
+
+    </div>
   </div>
 
-  <main class="relative z-10 mx-auto flex min-h-screen max-w-6xl items-center px-4 py-8 sm:px-6 lg:px-8">
-    <div class="grid w-full items-center gap-10 lg:grid-cols-2 lg:gap-16">
-
-      <!-- Brand panel (desktop) -->
-      <section class="hidden lg:block" aria-label="About Medmitra">
-        <div class="inline-flex items-center gap-3">
-          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-teal-500 to-sky-500 text-white shadow-lg shadow-teal-500/30" id="brand-logo"></span>
-          <span class="font-display text-2xl font-extrabold tracking-tight text-slate-900">Medmitra</span>
-        </div>
-        <h2 class="mt-8 font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900">
-          One connected space for<br />
-          <span class="bg-gradient-to-r from-teal-600 to-sky-600 bg-clip-text text-transparent">doctors, pharmacists &amp; patients.</span>
-        </h2>
-        <p class="mt-4 max-w-md text-base leading-relaxed text-slate-600">
-          Verified professionals, clearer prescriptions, and a smoother path from consultation to medicine.
-        </p>
-        <ul class="mt-8 space-y-4 max-w-md">
-          <li class="flex items-start gap-3">
-            <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white text-teal-600 shadow-sm ring-1 ring-slate-100" data-icon="shield"></span>
-            <div><p class="font-semibold text-slate-900">Licence-verified accounts</p><p class="text-sm text-slate-500">Every professional is checked before going live.</p></div>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white text-sky-600 shadow-sm ring-1 ring-slate-100" data-icon="stethoscope"></span>
-            <div><p class="font-semibold text-slate-900">Doctor ↔ pharmacy, in sync</p><p class="text-sm text-slate-500">Fewer calls, fewer errors, faster fulfilment.</p></div>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white text-teal-600 shadow-sm ring-1 ring-slate-100" data-icon="lock"></span>
-            <div><p class="font-semibold text-slate-900">Private by design</p><p class="text-sm text-slate-500">Your data stays protected, always.</p></div>
-          </li>
-        </ul>
-      </section>
-
-      <!-- Auth card -->
-      <section class="mx-auto w-full max-w-md lg:max-w-lg" aria-labelledby="page-title">
-        <div class="rounded-3xl bg-white/90 p-6 shadow-xl shadow-slate-900/5 ring-1 ring-slate-100 backdrop-blur sm:p-8">
-
-          <!-- Header -->
-          <header class="text-center">
-            <span class="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-teal-500 to-sky-500 text-white shadow-lg shadow-teal-500/30 lg:hidden" id="brand-logo-mobile"></span>
-            <h1 id="page-title" class="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Welcome to Medmitra</h1>
-            <p class="mt-1.5 text-sm text-slate-500">Your trusted bridge between care and medicine.</p>
-          </header>
-
-          <!-- Role selector -->
-          <div class="mt-7">
-            <p id="role-label" class="mb-3 text-center text-sm font-semibold text-slate-700">Are you a Doctor or a Pharmacist?</p>
-            <div role="radiogroup" aria-labelledby="role-label" class="grid grid-cols-2 gap-3" id="role-group"></div>
-          </div>
-
-          <!-- Dynamic area -->
-          <div id="auth-area" class="mt-7" aria-live="polite"></div>
-        </div>
-
-        <p class="mt-5 text-center text-xs text-slate-400">
-          By continuing you agree to Medmitra's <a href="#" class="underline underline-offset-2 hover:text-slate-600">Terms</a> and <a href="#" class="underline underline-offset-2 hover:text-slate-600">Privacy Policy</a>.
-        </p>
-      </section>
-    </div>
-  </main>
+  <!-- Bottom green bar -->
+  <div class="bottom-bar"></div>
 
   <!-- Forgot password modal -->
-  <div id="modal" class="fixed inset-0 z-50 hidden items-end justify-center p-0 sm:items-center sm:p-4" aria-hidden="true">
-    <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
-    <div role="dialog" aria-modal="true" aria-labelledby="modal-title" class="anim-pop relative w-full max-w-md rounded-t-3xl bg-white p-6 shadow-2xl sm:rounded-3xl sm:p-8" id="modal-panel">
-      <button type="button" id="modal-close" class="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/20" aria-label="Close">
-        <span data-icon="x"></span>
+  <div class="modal-overlay" id="modal" aria-hidden="true">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal-panel">
+      <button type="button" class="modal-close" id="modal-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
       <div id="modal-body"></div>
     </div>
@@ -138,233 +881,181 @@
 
 <script>
 /* ============================================================
-   Medmitra – Auth UI
-   Replace the two stubs below (authRequest / otpRequest) with
-   your real backend calls (e.g. Supabase) when you wire it up.
+   Medmitra – Auth UI (Healthcare-themed redesign)
    ============================================================ */
 
-const DEMO_MODE = true; // in demo mode any 6-digit OTP is accepted
+const DEMO_MODE = true;
 
-/* ---------- Icons (Lucide-style inline SVG) ---------- */
-const ICON_PATHS = {
-  logo: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>',
-  stethoscope: '<path d="M11 2v2"/><path d="M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/>',
-  pill: '<path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/>',
-  user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
-  building: '<path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/><path d="M9 18v.01"/>',
-  store: '<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/>',
-  phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>',
-  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
-  lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
-  eye: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
-  eyeOff: '<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/>',
-  check: '<path d="M20 6 9 17l-5-5"/>',
-  x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
-  arrowLeft: '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
-  arrowRight: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
-  message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+/* ---------- Icons ---------- */
+const ICON = {
+  eye: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
+  eyeOff: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>',
+  check: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  shield: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>',
+  lock: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+  msg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  arrowLeft: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>',
 };
-
-function icon(name, size = 20, extra = '') {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" ${extra}>${ICON_PATHS[name]}</svg>`;
-}
 
 /* ---------- Config ---------- */
 const ROLES = {
-  doctor:     { label: 'Doctor',     hint: 'Consult & prescribe', icon: 'stethoscope' },
-  pharmacist: { label: 'Pharmacist', hint: 'Verify & dispense',   icon: 'pill' },
+  doctor:     { label: 'Doctor',     hint: 'Consult & prescribe' },
+  pharmacist: { label: 'Pharmacist', hint: 'Verify & dispense' },
 };
 
-const CONTACT = { id: 'contact', label: 'Phone number or email', icon: 'phone', placeholder: '+91 98765 43210 or you@example.com', autocomplete: 'username' };
-const PASSWORD_SIGNIN = { id: 'password', label: 'Password', type: 'password', icon: 'lock', placeholder: 'Enter your password', autocomplete: 'current-password' };
-const PASSWORD_SIGNUP = { id: 'password', label: 'Create password', type: 'password', icon: 'lock', placeholder: 'At least 8 characters', autocomplete: 'new-password' };
-
 const FIELDS = {
-  signin: [CONTACT, PASSWORD_SIGNIN],
+  signin: [
+    { id: 'contact',  label: 'Username', placeholder: 'Username', type: 'text', autocomplete: 'username' },
+    { id: 'password', label: 'Password', placeholder: 'Password', type: 'password', autocomplete: 'current-password' },
+  ],
   signup: {
     doctor: [
-      { id: 'fullName',       label: 'Full name',                              icon: 'user',        placeholder: 'Dr. Ananya Rao', autocomplete: 'name' },
-      { id: 'specialization', label: 'Specialization',                         icon: 'stethoscope', placeholder: 'e.g. Cardiology', list: 'specializations' },
-      { id: 'org',            label: 'Hospital / Clinic name',                 icon: 'building',    placeholder: 'e.g. Sunrise Multispeciality Hospital', autocomplete: 'organization' },
-      CONTACT,
-      { id: 'license',        label: 'Medical registration / license number',  icon: 'shield',      placeholder: 'e.g. KMC-123456' },
-      PASSWORD_SIGNUP,
+      { id: 'fullName',       label: 'Full name', placeholder: 'Full name (e.g. Dr. Ananya Rao)', type: 'text', autocomplete: 'name' },
+      { id: 'specialization', label: 'Specialization', placeholder: 'Specialization (e.g. Cardiology)', type: 'text', list: 'specializations' },
+      { id: 'org',            label: 'Hospital / Clinic name', placeholder: 'Hospital / Clinic name', type: 'text', autocomplete: 'organization' },
+      { id: 'contact',        label: 'Phone number or email', placeholder: 'Phone number or email', type: 'text', autocomplete: 'username' },
+      { id: 'license',        label: 'Medical registration / license number', placeholder: 'Medical registration / license number', type: 'text' },
+      { id: 'password',       label: 'Password', placeholder: 'Create password (min 8 chars)', type: 'password', autocomplete: 'new-password' },
     ],
     pharmacist: [
-      { id: 'fullName', label: 'Full name',                          icon: 'user',   placeholder: 'e.g. Rahul Mehta', autocomplete: 'name' },
-      { id: 'org',      label: 'Pharmacy center / shop name',        icon: 'store',  placeholder: 'e.g. Apollo Care Pharmacy', autocomplete: 'organization' },
-      CONTACT,
-      { id: 'license',  label: 'Pharmacy license number',            icon: 'shield', placeholder: 'e.g. DL-20B-45678' },
-      PASSWORD_SIGNUP,
+      { id: 'fullName', label: 'Full name', placeholder: 'Full name (e.g. Rahul Mehta)', type: 'text', autocomplete: 'name' },
+      { id: 'org',      label: 'Pharmacy center / shop name', placeholder: 'Pharmacy center / shop name', type: 'text', autocomplete: 'organization' },
+      { id: 'contact',  label: 'Phone number or email', placeholder: 'Phone number or email', type: 'text', autocomplete: 'username' },
+      { id: 'license',  label: 'Pharmacy license number', placeholder: 'Pharmacy license number', type: 'text' },
+      { id: 'password', label: 'Password', placeholder: 'Create password (min 8 chars)', type: 'password', autocomplete: 'new-password' },
     ],
   },
 };
 
 /* ---------- Backend stubs ---------- */
 function authRequest({ mode, role, values }) {
-  // TODO: call your API here (e.g. supabase.auth.signInWithPassword / signUp)
   return new Promise((resolve) => setTimeout(() => resolve({ ok: true }), 900));
 }
 function otpRequest(action, payload) {
-  // TODO: action = 'send' | 'verify' | 'reset'
   return new Promise((resolve) => setTimeout(() => resolve({ ok: true }), 700));
 }
 
 /* ---------- State ---------- */
-const state = { role: null, mode: 'signin', status: null /* {type, text} */ };
+const state = { role: null, mode: 'signin', status: null };
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-/* ---------- Static icon hydration ---------- */
-$('#brand-logo').innerHTML = icon('logo', 26);
-$('#brand-logo-mobile').innerHTML = icon('logo', 28);
-document.querySelectorAll('[data-icon]').forEach((el) => { el.innerHTML = icon(el.dataset.icon, 20); });
-
-/* ---------- Role cards ---------- */
-function renderRoles() {
-  const group = $('#role-group');
-  group.innerHTML = Object.entries(ROLES).map(([key, r]) => {
-    const active = state.role === key;
-    return `
-      <button type="button" role="radio" aria-checked="${active}" data-role="${key}" tabindex="${active || (!state.role && key === 'doctor') ? 0 : -1}"
-        class="group relative flex flex-col items-center gap-2 rounded-2xl border-2 p-4 text-center transition duration-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/25 sm:p-5
-        ${active
-          ? 'border-teal-500 bg-teal-50 shadow-md shadow-teal-500/10'
-          : 'border-slate-200 bg-white hover:-translate-y-0.5 hover:border-teal-300 hover:shadow-md'}">
-        <span class="absolute right-2.5 top-2.5 grid h-5 w-5 place-items-center rounded-full bg-teal-500 text-white transition ${active ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}">${icon('check', 12, 'stroke-width="3"')}</span>
-        <span class="grid h-14 w-14 place-items-center rounded-2xl transition ${active ? 'bg-gradient-to-br from-teal-500 to-sky-500 text-white shadow-lg shadow-teal-500/30' : 'bg-slate-100 text-slate-500 group-hover:bg-teal-50 group-hover:text-teal-600'}">${icon(r.icon, 28)}</span>
-        <span class="font-display text-base font-bold ${active ? 'text-teal-700' : 'text-slate-800'}">${r.label}</span>
-        <span class="text-xs ${active ? 'text-teal-600' : 'text-slate-400'}">${r.hint}</span>
-      </button>`;
-  }).join('');
-}
-
-$('#role-group').addEventListener('click', (e) => {
+/* ---------- Role buttons ---------- */
+document.getElementById('role-group').addEventListener('click', (e) => {
   const btn = e.target.closest('[data-role]');
   if (!btn) return;
   selectRole(btn.dataset.role);
 });
-// Arrow-key navigation for the radio group
-$('#role-group').addEventListener('keydown', (e) => {
-  const keys = Object.keys(ROLES);
-  const current = keys.indexOf(document.activeElement.dataset?.role);
-  if (current === -1) return;
-  let next = null;
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = keys[(current + 1) % keys.length];
-  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   next = keys[(current - 1 + keys.length) % keys.length];
-  if (next) { e.preventDefault(); selectRole(next); $(`[data-role="${next}"]`).focus(); }
-});
 
 function selectRole(role) {
   if (state.role === role) return;
-  const first = !state.role;
   state.role = role;
-  state.mode = 'signin';       // Default to Sign In after picking a role
+  state.mode = 'signin';
   state.status = null;
-  renderRoles();
-  renderAuth(first);
+
+  document.querySelectorAll('.role-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.role === role);
+  });
+
+  renderAuth(true);
 }
 
 /* ---------- Auth area ---------- */
-function fieldHTML(f) {
-  const isPw = f.type === 'password';
-  return `
-    <div>
-      <label for="${f.id}" class="mb-1.5 block text-sm font-medium text-slate-700">${f.label}</label>
-      <div class="relative">
-        <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">${icon(f.icon, 18)}</span>
-        <input id="${f.id}" name="${f.id}" type="${isPw ? 'password' : 'text'}" placeholder="${esc(f.placeholder || '')}"
-          ${f.autocomplete ? `autocomplete="${f.autocomplete}"` : ''} ${f.list ? `list="${f.list}"` : ''}
-          ${f.id === 'contact' ? 'inputmode="email"' : ''}
-          aria-describedby="${f.id}-err" aria-invalid="false"
-          class="w-full rounded-xl border border-slate-200 bg-slate-50/70 py-3 pl-11 ${isPw ? 'pr-12' : 'pr-4'} text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/15 aria-[invalid=true]:border-rose-400 aria-[invalid=true]:bg-rose-50/40 aria-[invalid=true]:focus:ring-rose-500/15" />
-        ${isPw ? `<button type="button" data-toggle-pw="${f.id}" class="absolute right-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/20" aria-label="Show password" aria-pressed="false">${icon('eye', 18)}</button>` : ''}
-      </div>
-      <p id="${f.id}-err" role="alert" class="mt-1.5 hidden text-xs font-medium text-rose-600"></p>
-    </div>`;
-}
-
 function renderAuth(animate = true) {
-  const area = $('#auth-area');
+  const area = document.getElementById('auth-area');
+  const subtitle = document.getElementById('form-subtitle');
+
   if (!state.role) {
+    subtitle.textContent = 'Welcome back! Please login to your account.';
     area.innerHTML = `
-      <div class="rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/60 px-5 py-6 text-center">
-        <p class="text-sm text-slate-500">Select your role above to continue.</p>
+      <div style="text-align:center;padding:2rem 1rem;color:#bbb;font-size:0.85rem;">
+        Select your role above to continue.
       </div>`;
     return;
   }
 
-  const role = state.role;
   const isSignIn = state.mode === 'signin';
-  const fields = isSignIn ? FIELDS.signin : FIELDS.signup[role];
-  const roleLabel = ROLES[role].label;
+  const fields = isSignIn ? FIELDS.signin : FIELDS.signup[state.role];
+  const roleLabel = ROLES[state.role].label;
+
+  subtitle.textContent = isSignIn
+    ? 'Welcome back! Please login to your account.'
+    : `Create your ${roleLabel} account.`;
+
+  const fieldsHTML = fields.map(f => {
+    const isPw = f.type === 'password';
+    return `
+      <div class="form-group">
+        <label for="${f.id}">${f.label || f.placeholder}</label>
+        <div class="input-wrap">
+          <input id="${f.id}" name="${f.id}" type="${isPw ? 'password' : 'text'}"
+            placeholder="${esc(f.placeholder)}"
+            class="${isPw ? 'has-toggle' : ''}"
+            ${f.autocomplete ? `autocomplete="${f.autocomplete}"` : ''}
+            ${f.list ? `list="${f.list}"` : ''}
+            aria-describedby="${f.id}-err" aria-invalid="false" />
+          ${isPw ? `<button type="button" class="pw-toggle" data-toggle-pw="${f.id}" aria-label="Show password" aria-pressed="false">${ICON.eye}</button>` : ''}
+        </div>
+        <p id="${f.id}-err" class="error-text" role="alert"></p>
+      </div>`;
+  }).join('');
 
   area.innerHTML = `
-    <div class="${animate ? 'anim-fade-up' : ''}" id="auth-inner">
-      <!-- Tabs -->
-      <div role="tablist" aria-label="Sign in or sign up" class="grid grid-cols-2 rounded-xl bg-slate-100 p-1">
-        ${['signin', 'signup'].map((m) => `
-          <button type="button" role="tab" id="tab-${m}" data-mode="${m}" aria-selected="${state.mode === m}" aria-controls="auth-form"
-            class="rounded-lg px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/25
-            ${state.mode === m ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
-            ${m === 'signin' ? 'Sign In' : 'Sign Up'}
-          </button>`).join('')}
-      </div>
-
-      <div class="mt-5">
-        <h2 class="font-display text-lg font-bold text-slate-900">${isSignIn ? `Sign in as ${roleLabel}` : `Create your ${roleLabel} account`}</h2>
-        <p class="mt-0.5 text-sm text-slate-500">${isSignIn ? 'Welcome back — enter your details to continue.' : (role === 'doctor' ? 'Your registration number will be verified before activation.' : 'Your pharmacy license will be verified before activation.')}</p>
-      </div>
-
-      <div id="status" class="mt-4" role="status" aria-live="polite">${statusHTML()}</div>
-
-      <form id="auth-form" role="tabpanel" aria-labelledby="tab-${state.mode}" novalidate class="mt-4 space-y-4">
-        ${fields.map(fieldHTML).join('')}
-
-        ${isSignIn ? `
-          <div class="-mt-1 flex justify-end">
-            <button type="button" id="forgot-link" class="rounded text-sm font-semibold text-teal-600 underline-offset-4 transition hover:text-teal-700 hover:underline focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/20">Forgot password?</button>
-          </div>` : ''}
-
-        <button type="submit" id="submit-btn"
-          class="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-500 to-sky-500 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-500/25 transition hover:from-teal-600 hover:to-sky-600 hover:shadow-xl focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/30 disabled:cursor-not-allowed disabled:opacity-70">
-          <span id="submit-label">${isSignIn ? 'Sign In' : 'Create Account'}</span>
-          <span id="submit-icon" class="transition group-hover:translate-x-0.5">${icon('arrowRight', 18)}</span>
-        </button>
-      </form>
-
-      <p class="mt-5 text-center text-sm text-slate-500">
-        ${isSignIn ? "Don't have an account?" : 'Already have an account?'}
-        <button type="button" data-mode="${isSignIn ? 'signup' : 'signin'}" class="rounded font-semibold text-teal-600 underline-offset-4 hover:text-teal-700 hover:underline focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/20">${isSignIn ? 'Sign Up' : 'Sign In'}</button>
-      </p>
+    <div class="${animate ? 'anim-fade' : ''}">
+      ${isSignIn ? `
+        <form id="auth-form" novalidate>
+          ${fieldsHTML}
+          <div class="options-row">
+            <label class="remember-me">
+              <input type="checkbox" /> Remember me
+            </label>
+            <button type="button" class="forgot-link" id="forgot-link">Forgot Password</button>
+          </div>
+          <div class="btn-row">
+            <button type="submit" class="btn-login" id="submit-btn">Login</button>
+            <button type="button" class="btn-signup" id="goto-signup">Sign up</button>
+          </div>
+          <div class="contact-link">
+            <a href="#">Contact us</a>
+          </div>
+        </form>
+      ` : `
+        <form id="auth-form" novalidate class="signup-form">
+          <div class="form-scroll">
+            ${fieldsHTML}
+          </div>
+          <div class="btn-row" style="margin-top:1.25rem;">
+            <button type="submit" class="btn-login" id="submit-btn">Create Account</button>
+          </div>
+          <div class="back-to-login">
+            <button type="button" id="goto-signin">Already have an account? Sign In</button>
+          </div>
+        </form>
+      `}
     </div>`;
 }
 
-function statusHTML() {
-  if (!state.status) return '';
-  const ok = state.status.type === 'success';
-  return `<div class="anim-pop flex items-start gap-2.5 rounded-xl px-4 py-3 text-sm ${ok ? 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-100' : 'bg-rose-50 text-rose-800 ring-1 ring-rose-100'}">
-    <span class="mt-0.5 shrink-0">${icon(ok ? 'check' : 'x', 16, 'stroke-width="2.5"')}</span><span>${esc(state.status.text)}</span></div>`;
-}
-
-/* ---------- Delegated events in auth area ---------- */
-$('#auth-area').addEventListener('click', (e) => {
-  const modeBtn = e.target.closest('[data-mode]');
-  if (modeBtn && modeBtn.dataset.mode !== state.mode) {
-    state.mode = modeBtn.dataset.mode;
+/* ---------- Delegated events ---------- */
+document.getElementById('auth-area').addEventListener('click', (e) => {
+  if (e.target.closest('#goto-signup')) {
+    state.mode = 'signup';
     state.status = null;
     renderAuth(true);
-    // keep keyboard focus on the tab if a tab was used
-    if (modeBtn.getAttribute('role') === 'tab') $(`#tab-${state.mode}`)?.focus();
+    return;
+  }
+  if (e.target.closest('#goto-signin')) {
+    state.mode = 'signin';
+    state.status = null;
+    renderAuth(true);
     return;
   }
   const pwBtn = e.target.closest('[data-toggle-pw]');
   if (pwBtn) {
-    const input = $('#' + pwBtn.dataset.togglePw);
+    const input = document.getElementById(pwBtn.dataset.togglePw);
     const show = input.type === 'password';
     input.type = show ? 'text' : 'password';
-    pwBtn.innerHTML = icon(show ? 'eyeOff' : 'eye', 18);
+    pwBtn.innerHTML = show ? ICON.eyeOff : ICON.eye;
     pwBtn.setAttribute('aria-pressed', String(show));
     pwBtn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
     return;
@@ -372,11 +1063,11 @@ $('#auth-area').addEventListener('click', (e) => {
   if (e.target.closest('#forgot-link')) openModal();
 });
 
-$('#auth-area').addEventListener('input', (e) => {
+document.getElementById('auth-area').addEventListener('input', (e) => {
   if (e.target.matches('input')) clearError(e.target);
 });
 
-$('#auth-area').addEventListener('submit', async (e) => {
+document.getElementById('auth-area').addEventListener('submit', async (e) => {
   e.preventDefault();
   const form = e.target;
   const fields = state.mode === 'signin' ? FIELDS.signin : FIELDS.signup[state.role];
@@ -395,23 +1086,31 @@ $('#auth-area').addEventListener('submit', async (e) => {
   try {
     const res = await authRequest({ mode: state.mode, role: state.role, values });
     if (!res.ok) throw new Error('Request failed');
-    state.status = state.mode === 'signin'
-      ? { type: 'success', text: `Signed in as ${ROLES[state.role].label}. Redirecting to your dashboard…` }
-      : { type: 'success', text: 'Account created! We’ll verify your license and notify you shortly.' };
+    showStatus('success', state.mode === 'signin'
+      ? `Signed in as ${ROLES[state.role].label}. Redirecting to your dashboard…`
+      : 'Account created! We\'ll verify your license and notify you shortly.');
   } catch (err) {
-    state.status = { type: 'error', text: 'Something went wrong. Please try again.' };
+    showStatus('error', 'Something went wrong. Please try again.');
   }
   setLoading(false);
-  $('#status').innerHTML = statusHTML();
 });
 
 function setLoading(on) {
-  const btn = $('#submit-btn'); if (!btn) return;
+  const btn = document.getElementById('submit-btn');
+  if (!btn) return;
   btn.disabled = on;
-  $('#submit-icon').innerHTML = on
-    ? `<svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.2-8.55" /></svg>`
-    : icon('arrowRight', 18);
-  $('#submit-label').textContent = on ? 'Please wait…' : (state.mode === 'signin' ? 'Sign In' : 'Create Account');
+  if (on) {
+    btn.dataset.origLabel = btn.textContent;
+    btn.textContent = 'Please wait…';
+  } else {
+    btn.textContent = btn.dataset.origLabel || (state.mode === 'signin' ? 'Login' : 'Create Account');
+  }
+}
+
+function showStatus(type, text) {
+  const el = document.getElementById('status-msg');
+  el.className = `status-msg visible ${type}`;
+  el.innerHTML = `<span>${esc(text)}</span>`;
 }
 
 /* ---------- Validation ---------- */
@@ -420,29 +1119,32 @@ const phoneDigits = (s) => s.replace(/[\s\-()]/g, '').replace(/^\+?91/, '');
 const isPhone = (s) => /^[6-9]\d{9}$/.test(phoneDigits(s)) || /^\+\d{10,14}$/.test(s.replace(/[\s\-()]/g, ''));
 
 function validate(f, v, mode) {
-  if (!v) return `${f.label} is required.`;
+  const label = f.label || f.placeholder;
+  if (!v) return `${label} is required.`;
   if (f.id === 'contact' && !(EMAIL_RE.test(v) || isPhone(v))) return 'Enter a valid email or 10-digit phone number.';
   if (f.id === 'password' && mode === 'signup' && v.length < 8) return 'Password must be at least 8 characters.';
   if (f.id === 'license' && v.length < 4) return 'Enter a valid license number.';
   if (f.id === 'fullName' && v.length < 2) return 'Enter your full name.';
   return '';
 }
+
 function setError(input, msg) {
   input.setAttribute('aria-invalid', 'true');
   const p = document.getElementById(input.id + '-err');
-  if (p) { p.textContent = msg; p.classList.remove('hidden'); }
+  if (p) { p.textContent = msg; p.classList.add('visible'); }
 }
+
 function clearError(input) {
   input.setAttribute('aria-invalid', 'false');
   const p = document.getElementById(input.id + '-err');
-  if (p) { p.textContent = ''; p.classList.add('hidden'); }
+  if (p) { p.textContent = ''; p.classList.remove('visible'); }
 }
 
 /* ============================================================
    Forgot password – phone OTP modal
    ============================================================ */
-const modal = $('#modal');
-const modalBody = $('#modal-body');
+const modal = document.getElementById('modal');
+const modalBody = document.getElementById('modal-body');
 const otp = { step: 1, phone: '', timer: null, left: 0 };
 let lastFocus = null;
 
@@ -450,25 +1152,27 @@ function openModal() {
   lastFocus = document.activeElement;
   otp.step = 1; otp.phone = '';
   renderModal();
-  modal.classList.remove('hidden'); modal.classList.add('flex');
+  modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
   setTimeout(() => modalBody.querySelector('input,button')?.focus(), 30);
 }
+
 function closeModal() {
   clearInterval(otp.timer);
-  modal.classList.add('hidden'); modal.classList.remove('flex');
+  modal.classList.remove('open');
   modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
   (document.getElementById('forgot-link') || lastFocus)?.focus();
 }
-$('#modal-close').addEventListener('click', closeModal);
-$('#modal-backdrop').addEventListener('click', closeModal);
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-backdrop').addEventListener('click', closeModal);
 document.addEventListener('keydown', (e) => {
-  if (modal.classList.contains('hidden')) return;
+  if (!modal.classList.contains('open')) return;
   if (e.key === 'Escape') closeModal();
-  if (e.key === 'Tab') { // simple focus trap
-    const f = [...$('#modal-panel').querySelectorAll('button, input, [href]')].filter((el) => !el.disabled && el.offsetParent !== null);
+  if (e.key === 'Tab') {
+    const f = [...document.getElementById('modal-panel').querySelectorAll('button, input, [href]')].filter((el) => !el.disabled && el.offsetParent !== null);
     if (!f.length) return;
     const first = f[0], last = f[f.length - 1];
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -476,65 +1180,45 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-function modalField({ id, label, type = 'text', placeholder, prefix, icon: ic, autocomplete, inputmode, maxlength }) {
-  const isPw = type === 'password';
-  return `
-    <div>
-      <label for="${id}" class="mb-1.5 block text-sm font-medium text-slate-700">${label}</label>
-      <div class="relative flex">
-        ${prefix ? `<span class="inline-flex items-center rounded-l-xl border border-r-0 border-slate-200 bg-slate-100 px-3.5 text-sm font-medium text-slate-500">${prefix}</span>` : ''}
-        <div class="relative flex-1">
-          ${ic ? `<span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">${icon(ic, 18)}</span>` : ''}
-          <input id="${id}" type="${type}" placeholder="${placeholder || ''}" ${autocomplete ? `autocomplete="${autocomplete}"` : ''} ${inputmode ? `inputmode="${inputmode}"` : ''} ${maxlength ? `maxlength="${maxlength}"` : ''}
-            aria-describedby="${id}-err" aria-invalid="false"
-            class="w-full border border-slate-200 bg-slate-50/70 py-3 ${ic ? 'pl-11' : 'pl-4'} ${isPw ? 'pr-12' : 'pr-4'} ${prefix ? 'rounded-r-xl' : 'rounded-xl'} text-sm outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/15 aria-[invalid=true]:border-rose-400" />
-          ${isPw ? `<button type="button" data-toggle-pw="${id}" class="absolute right-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/20" aria-label="Show password" aria-pressed="false">${icon('eye', 18)}</button>` : ''}
-        </div>
-      </div>
-      <p id="${id}-err" role="alert" class="mt-1.5 hidden text-xs font-medium text-rose-600"></p>
-    </div>`;
-}
-
-const primaryBtn = (label, id = 'modal-primary') => `
-  <button type="submit" id="${id}" class="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-500 to-sky-500 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-500/25 transition hover:from-teal-600 hover:to-sky-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/30 disabled:cursor-not-allowed disabled:opacity-70">${label}</button>`;
-
-const modalHead = (iconName, title, sub) => `
-  <div class="text-center">
-    <span class="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-teal-50 text-teal-600">${icon(iconName, 26)}</span>
-    <h2 id="modal-title" class="font-display text-xl font-extrabold text-slate-900">${title}</h2>
-    <p class="mt-1.5 text-sm text-slate-500">${sub}</p>
-  </div>`;
-
 function renderModal() {
   clearInterval(otp.timer);
   const masked = otp.phone ? `+91 ${'•'.repeat(6)}${otp.phone.slice(-4)}` : '';
 
   if (otp.step === 1) {
     modalBody.innerHTML = `
-      ${modalHead('message', 'Reset your password', 'Enter your registered phone number and we’ll text you a 6-digit code.')}
-      <form id="otp-form" novalidate class="mt-6 space-y-4">
-        ${modalField({ id: 'otp-phone', label: 'Phone number', prefix: '+91', placeholder: '98765 43210', autocomplete: 'tel-national', inputmode: 'numeric', maxlength: 12 })}
-        ${primaryBtn('Send OTP')}
-        <button type="button" data-close class="w-full rounded-xl py-2.5 text-sm font-semibold text-slate-500 hover:text-slate-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/20">Back to sign in</button>
+      <div class="modal-head">
+        <div class="modal-icon">${ICON.msg}</div>
+        <h2 id="modal-title">Reset your password</h2>
+        <p>Enter your registered phone number and we'll text you a 6-digit code.</p>
+      </div>
+      <form id="otp-form" novalidate class="modal-form">
+        <div class="form-group">
+          <label for="otp-phone">Phone number</label>
+          <input id="otp-phone" type="text" placeholder="98765 43210" autocomplete="tel-national" inputmode="numeric" maxlength="12" />
+          <p id="otp-phone-err" class="error-text" role="alert"></p>
+        </div>
+        <button type="submit" class="modal-btn-primary" id="modal-primary">Send OTP</button>
+        <button type="button" class="modal-btn-secondary" data-close>Back to sign in</button>
       </form>`;
   }
 
   if (otp.step === 2) {
     modalBody.innerHTML = `
-      ${modalHead('shield', 'Enter verification code', `We sent a 6-digit code to <span class="font-semibold text-slate-700">${masked}</span>.`)}
-      <form id="otp-form" novalidate class="mt-6 space-y-4">
-        <div>
-          <div class="flex justify-center gap-2 sm:gap-2.5" id="otp-boxes" role="group" aria-label="6-digit verification code">
-            ${[0,1,2,3,4,5].map((i) => `<input type="text" inputmode="numeric" maxlength="1" autocomplete="${i === 0 ? 'one-time-code' : 'off'}" aria-label="Digit ${i + 1}" data-otp="${i}"
-              class="h-12 w-11 rounded-xl border border-slate-200 bg-slate-50/70 text-center text-lg font-bold text-slate-900 outline-none transition focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/15 aria-[invalid=true]:border-rose-400 sm:h-14 sm:w-12" />`).join('')}
-          </div>
-          <p id="otp-err" role="alert" class="mt-2 hidden text-center text-xs font-medium text-rose-600"></p>
-          ${DEMO_MODE ? '<p class="mt-2 text-center text-xs text-slate-400">Demo mode: any 6-digit code works.</p>' : ''}
+      <div class="modal-head">
+        <div class="modal-icon">${ICON.shield}</div>
+        <h2 id="modal-title">Enter verification code</h2>
+        <p>We sent a 6-digit code to <strong>${masked}</strong>.</p>
+      </div>
+      <form id="otp-form" novalidate class="modal-form">
+        <div class="otp-boxes" id="otp-boxes" role="group" aria-label="6-digit code">
+          ${[0,1,2,3,4,5].map(i => `<input type="text" inputmode="numeric" maxlength="1" autocomplete="${i===0?'one-time-code':'off'}" aria-label="Digit ${i+1}" data-otp="${i}" />`).join('')}
         </div>
-        ${primaryBtn('Verify code')}
-        <div class="flex items-center justify-between text-sm">
-          <button type="button" data-back class="inline-flex items-center gap-1 rounded font-semibold text-slate-500 hover:text-slate-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/20">${icon('arrowLeft', 14)} Change number</button>
-          <button type="button" id="resend" disabled class="rounded font-semibold text-teal-600 hover:text-teal-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/20 disabled:cursor-not-allowed disabled:text-slate-400"></button>
+        <p id="otp-err" class="error-text" role="alert" style="text-align:center;"></p>
+        ${DEMO_MODE ? '<p style="text-align:center;font-size:0.75rem;color:#bbb;margin-bottom:0.75rem;">Demo mode: any 6-digit code works.</p>' : ''}
+        <button type="submit" class="modal-btn-primary" id="modal-primary">Verify code</button>
+        <div class="otp-footer">
+          <button type="button" class="change-num" data-back>${ICON.arrowLeft} Change number</button>
+          <button type="button" class="resend-btn" id="resend" disabled></button>
         </div>
       </form>`;
     startResendTimer(30);
@@ -542,31 +1226,52 @@ function renderModal() {
 
   if (otp.step === 3) {
     modalBody.innerHTML = `
-      ${modalHead('lock', 'Create a new password', 'Choose a strong password you haven’t used before.')}
-      <form id="otp-form" novalidate class="mt-6 space-y-4">
-        ${modalField({ id: 'new-pw', label: 'New password', type: 'password', ic: 'lock', placeholder: 'At least 8 characters', autocomplete: 'new-password' })}
-        ${modalField({ id: 'confirm-pw', label: 'Confirm password', type: 'password', ic: 'lock', placeholder: 'Re-enter password', autocomplete: 'new-password' })}
-        ${primaryBtn('Update password')}
+      <div class="modal-head">
+        <div class="modal-icon">${ICON.lock}</div>
+        <h2 id="modal-title">Create a new password</h2>
+        <p>Choose a strong password you haven't used before.</p>
+      </div>
+      <form id="otp-form" novalidate class="modal-form">
+        <div class="form-group">
+          <label for="new-pw">New password</label>
+          <div class="input-wrap">
+            <input id="new-pw" type="password" class="has-toggle" placeholder="At least 8 characters" autocomplete="new-password" />
+            <button type="button" class="pw-toggle" data-toggle-pw="new-pw" aria-label="Show password">${ICON.eye}</button>
+          </div>
+          <p id="new-pw-err" class="error-text" role="alert"></p>
+        </div>
+        <div class="form-group">
+          <label for="confirm-pw">Confirm password</label>
+          <div class="input-wrap">
+            <input id="confirm-pw" type="password" class="has-toggle" placeholder="Re-enter password" autocomplete="new-password" />
+            <button type="button" class="pw-toggle" data-toggle-pw="confirm-pw" aria-label="Show password">${ICON.eye}</button>
+          </div>
+          <p id="confirm-pw-err" class="error-text" role="alert"></p>
+        </div>
+        <button type="submit" class="modal-btn-primary" id="modal-primary">Update password</button>
       </form>`;
   }
 
   if (otp.step === 4) {
     modalBody.innerHTML = `
-      <div class="text-center">
-        <span class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-emerald-50 text-emerald-600 anim-pop">${icon('check', 32, 'stroke-width="3"')}</span>
-        <h2 id="modal-title" class="font-display text-xl font-extrabold text-slate-900">Password updated</h2>
-        <p class="mt-1.5 text-sm text-slate-500">You can now sign in with your new password.</p>
-        <button type="button" data-close class="mt-6 w-full rounded-xl bg-gradient-to-r from-teal-500 to-sky-500 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-500/25 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-500/30">Back to sign in</button>
-      </div>`;
+      <div class="modal-head">
+        <div class="modal-icon anim-pop" style="background:#eef9f7;color:#38b2a0;border-radius:50%;width:64px;height:64px;">
+          ${ICON.check}
+        </div>
+        <h2 id="modal-title">Password updated</h2>
+        <p>You can now sign in with your new password.</p>
+      </div>
+      <button type="button" class="modal-btn-primary" data-close>Back to sign in</button>`;
   }
+
   setTimeout(() => modalBody.querySelector('input, button[data-close]')?.focus(), 20);
 }
 
 function startResendTimer(sec) {
   otp.left = sec;
-  const btn = $('#resend');
+  const btn = document.getElementById('resend');
   const tick = () => {
-    if (!btn.isConnected) return clearInterval(otp.timer);
+    if (!btn || !btn.isConnected) return clearInterval(otp.timer);
     if (otp.left > 0) { btn.disabled = true; btn.textContent = `Resend in ${otp.left}s`; otp.left--; }
     else { btn.disabled = false; btn.textContent = 'Resend code'; clearInterval(otp.timer); }
   };
@@ -574,8 +1279,9 @@ function startResendTimer(sec) {
   otp.timer = setInterval(tick, 1000);
 }
 
-function modalLoading(on, label) {
-  const b = $('#modal-primary'); if (!b) return;
+function modalLoading(on) {
+  const b = document.getElementById('modal-primary');
+  if (!b) return;
   b.disabled = on;
   b.dataset.label = b.dataset.label || b.textContent;
   b.textContent = on ? 'Please wait…' : b.dataset.label;
@@ -587,17 +1293,17 @@ modalBody.addEventListener('click', async (e) => {
   if (e.target.closest('[data-back]')) { otp.step = 1; return renderModal(); }
   if (e.target.closest('#resend')) {
     await otpRequest('send', { phone: otp.phone });
-    $('#otp-boxes').querySelectorAll('input').forEach((i) => (i.value = ''));
-    $('[data-otp="0"]').focus();
+    document.getElementById('otp-boxes').querySelectorAll('input').forEach(i => (i.value = ''));
+    document.querySelector('[data-otp="0"]').focus();
     startResendTimer(30);
     return;
   }
   const pw = e.target.closest('[data-toggle-pw]');
   if (pw) {
-    const input = $('#' + pw.dataset.togglePw, modalBody);
+    const input = document.getElementById(pw.dataset.togglePw);
     const show = input.type === 'password';
     input.type = show ? 'text' : 'password';
-    pw.innerHTML = icon(show ? 'eyeOff' : 'eye', 18);
+    pw.innerHTML = show ? ICON.eyeOff : ICON.eye;
     pw.setAttribute('aria-pressed', String(show));
     pw.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
   }
@@ -607,33 +1313,38 @@ modalBody.addEventListener('input', (e) => {
   const t = e.target;
   if (t.matches('[data-otp]')) {
     t.value = t.value.replace(/\D/g, '').slice(-1);
-    t.setAttribute('aria-invalid', 'false');
-    $('#otp-err').classList.add('hidden');
+    const errEl = document.getElementById('otp-err');
+    if (errEl) errEl.classList.remove('visible');
     const i = +t.dataset.otp;
-    if (t.value && i < 5) $(`[data-otp="${i + 1}"]`).focus();
+    if (t.value && i < 5) document.querySelector(`[data-otp="${i + 1}"]`).focus();
   } else if (t.matches('input')) clearError(t);
 });
+
 modalBody.addEventListener('keydown', (e) => {
   if (!e.target.matches('[data-otp]')) return;
   const i = +e.target.dataset.otp;
-  if (e.key === 'Backspace' && !e.target.value && i > 0) $(`[data-otp="${i - 1}"]`).focus();
-  if (e.key === 'ArrowLeft' && i > 0) $(`[data-otp="${i - 1}"]`).focus();
-  if (e.key === 'ArrowRight' && i < 5) $(`[data-otp="${i + 1}"]`).focus();
+  if (e.key === 'Backspace' && !e.target.value && i > 0) document.querySelector(`[data-otp="${i - 1}"]`).focus();
+  if (e.key === 'ArrowLeft' && i > 0) document.querySelector(`[data-otp="${i - 1}"]`).focus();
+  if (e.key === 'ArrowRight' && i < 5) document.querySelector(`[data-otp="${i + 1}"]`).focus();
 });
+
 modalBody.addEventListener('paste', (e) => {
   if (!e.target.matches('[data-otp]')) return;
   const digits = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
   if (!digits) return;
   e.preventDefault();
-  digits.split('').forEach((d, i) => { const el = $(`[data-otp="${i}"]`); if (el) el.value = d; });
-  $(`[data-otp="${Math.min(digits.length, 5)}"]`).focus();
+  digits.split('').forEach((d, i) => {
+    const el = document.querySelector(`[data-otp="${i}"]`);
+    if (el) el.value = d;
+  });
+  document.querySelector(`[data-otp="${Math.min(digits.length, 5)}"]`).focus();
 });
 
 modalBody.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   if (otp.step === 1) {
-    const input = $('#otp-phone');
+    const input = document.getElementById('otp-phone');
     const digits = input.value.replace(/\D/g, '').replace(/^91(?=\d{10}$)/, '');
     if (!/^[6-9]\d{9}$/.test(digits)) return setError(input, 'Enter a valid 10-digit mobile number.');
     otp.phone = digits;
@@ -643,21 +1354,25 @@ modalBody.addEventListener('submit', async (e) => {
   }
 
   else if (otp.step === 2) {
-    const code = [...modalBody.querySelectorAll('[data-otp]')].map((i) => i.value).join('');
-    const err = $('#otp-err');
+    const code = [...modalBody.querySelectorAll('[data-otp]')].map(i => i.value).join('');
+    const err = document.getElementById('otp-err');
     if (code.length < 6) {
-      err.textContent = 'Enter all 6 digits.'; err.classList.remove('hidden');
-      modalBody.querySelectorAll('[data-otp]').forEach((i) => i.setAttribute('aria-invalid', 'true'));
+      if (err) { err.textContent = 'Enter all 6 digits.'; err.classList.add('visible'); }
       return;
     }
     modalLoading(true);
     const res = await otpRequest('verify', { phone: otp.phone, code });
-    if (!res.ok && !DEMO_MODE) { modalLoading(false); err.textContent = 'Incorrect code. Try again.'; err.classList.remove('hidden'); return; }
+    if (!res.ok && !DEMO_MODE) {
+      modalLoading(false);
+      if (err) { err.textContent = 'Incorrect code. Try again.'; err.classList.add('visible'); }
+      return;
+    }
     otp.step = 3; renderModal();
   }
 
   else if (otp.step === 3) {
-    const a = $('#new-pw'), b = $('#confirm-pw');
+    const a = document.getElementById('new-pw');
+    const b = document.getElementById('confirm-pw');
     let bad = null;
     if (a.value.length < 8) { setError(a, 'Password must be at least 8 characters.'); bad = bad || a; }
     if (b.value !== a.value || !b.value) { setError(b, 'Passwords do not match.'); bad = bad || b; }
@@ -669,7 +1384,6 @@ modalBody.addEventListener('submit', async (e) => {
 });
 
 /* ---------- Init ---------- */
-renderRoles();
 renderAuth(false);
 </script>
 </body>
