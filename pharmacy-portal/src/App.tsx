@@ -167,7 +167,7 @@ export default function App() {
       {isDemo && (
         <div className="flex items-center justify-center gap-2 bg-amber-300 px-4 py-2 text-center text-base font-bold text-amber-950">
           <FlaskConical className="h-5 w-5 shrink-0" aria-hidden="true" />
-          DEMO MODE: fictional patients and medicines, nothing is saved. Try “Aarav”, “Meera” or “9988”.
+          DEMO MODE: fictional patients and medicines, nothing is saved. Try “Aarav”, “John”, “Meera” or “9988”.
         </div>
       )}
 

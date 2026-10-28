@@ -7,7 +7,8 @@
 insert into public.patients (id, full_name, phone, date_of_birth) values
   ('11111111-1111-1111-1111-111111111111', 'Aarav Sharma', '9876543210', '1984-03-12'),
   ('22222222-2222-2222-2222-222222222222', 'Meera Iyer',   '9123456780', '1958-11-02'),
-  ('33333333-3333-3333-3333-333333333333', 'Rohan Verma',  '9988776655', '1992-07-21')
+  ('33333333-3333-3333-3333-333333333333', 'Rohan Verma',  '9988776655', '1992-07-21'),
+  ('44444444-4444-4444-4444-444444444444', 'John Doe',     '9845123456', '1979-05-18')
 on conflict (id) do nothing;
 
 insert into public.prescriptions (id, patient_id, prescriber_name, issued_on, refill_due_date, status) values
@@ -18,7 +19,8 @@ insert into public.prescriptions (id, patient_id, prescriber_name, issued_on, re
   -- Expired (red): cannot be dispensed
   ('aaaaaaa1-0000-0000-0000-000000000003', '22222222-2222-2222-2222-222222222222', 'Dr. Demo Rao', current_date - 14, current_date - 3, 'ACTIVE'),
   -- Contains a controlled medicine: blocked on this screen
-  ('aaaaaaa1-0000-0000-0000-000000000004', '33333333-3333-3333-3333-333333333333', 'Dr. Demo Nair', current_date - 1, current_date + 5, 'ACTIVE')
+  ('aaaaaaa1-0000-0000-0000-000000000004', '33333333-3333-3333-3333-333333333333', 'Dr. Demo Nair', current_date - 1, current_date + 5, 'ACTIVE'),
+  ('aaaaaaa1-0000-0000-0000-000000000005', '44444444-4444-4444-4444-444444444444', 'Dr. Rajesh Singhania', current_date - 3, current_date + 12, 'ACTIVE')
 on conflict (id) do nothing;
 
 insert into public.prescription_items
