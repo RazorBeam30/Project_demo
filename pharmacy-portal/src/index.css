@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-brand-50 text-slate-900 antialiased;
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  :focus-visible {
+    outline: 3px solid #064e3b;
+    outline-offset: 2px;
+  }
+}
+
+@media print {
+  body > *:not(.guide-portal) {
+    display: none !important;
+  }
+  .guide-portal {
+    position: static !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
